@@ -39,54 +39,6 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Contact Information */}
-      <section className="section-padding bg-white">
-        <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            <div className="text-center p-6 bg-gray-50 rounded-lg">
-              <div className="w-16 h-16 bg-primary-yellow rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone className="w-8 h-8 text-navy-blue" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2 text-navy-blue">Phone</h3>
-              <p className="text-gray-600">+91 98666 63349</p>
-              <p className="text-gray-600">+91 78935 15501</p>
-            </div>
-
-            <div className="text-center p-6 bg-gray-50 rounded-lg">
-              <div className="w-16 h-16 bg-primary-yellow rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-8 h-8 text-navy-blue" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2 text-navy-blue">Email</h3>
-              <p className="text-gray-600">info@srisanari.com</p>
-              <p className="text-gray-600">srisanari.raju@gmail.com</p>
-            </div>
-
-            <div className="text-center p-6 bg-gray-50 rounded-lg">
-              <div className="w-16 h-16 bg-primary-yellow rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-8 h-8 text-navy-blue" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2 text-navy-blue">Address</h3>
-              <p className="text-gray-600 text-sm">
-                Villa #748, Symphony Park Homes,
-                <br />
-                Beeramguda, Patancheru,
-                <br />
-                Sangareddy, Hyd, TS - 502319
-              </p>
-            </div>
-
-            <div className="text-center p-6 bg-gray-50 rounded-lg">
-              <div className="w-16 h-16 bg-primary-yellow rounded-full flex items-center justify-center mx-auto mb-4">
-                <Clock className="w-8 h-8 text-navy-blue" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2 text-navy-blue">Office Hours</h3>
-              <p className="text-gray-600">Mon - Sat: 9:00 AM - 7:00 PM</p>
-              <p className="text-gray-600">Sunday: 10:00 AM - 5:00 PM</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Contact Form & Map */}
       <section className="section-padding bg-light">
         <div className="container">
@@ -94,8 +46,9 @@ export default function ContactPage() {
             {/* Contact Form */}
             <div>
               <h2 className="text-3xl font-bold mb-6 text-navy-blue">Send us a Message</h2>
-              <div className="bg-white p-8 rounded-lg shadow-lg">
+              <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 transition-all duration-300 hover:shadow-xl">
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  <p className="text-gray-600 mb-6">We'll get back to you within 24 hours</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
@@ -105,7 +58,7 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow"
+                        className="w-full px-4 py-3 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all duration-200"
                         placeholder="Your full name"
                       />
                     </div>
@@ -117,7 +70,7 @@ export default function ContactPage() {
                         value={formData.phone}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow"
+                        className="w-full px-4 py-3 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all duration-200"
                         placeholder="Your phone number"
                       />
                     </div>
@@ -131,7 +84,7 @@ export default function ContactPage() {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all duration-200"
                       placeholder="Your email address"
                     />
                   </div>
@@ -143,7 +96,7 @@ export default function ContactPage() {
                       value={formData.subject}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all duration-200 bg-white"
                     >
                       <option value="">Select a subject</option>
                       <option value="property-inquiry">Property Inquiry</option>
@@ -163,12 +116,15 @@ export default function ContactPage() {
                       onChange={handleInputChange}
                       required
                       rows={5}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow resize-none"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent resize-none transition-all duration-200"
                       placeholder="Tell us about your requirements..."
                     ></textarea>
                   </div>
 
-                  <button type="submit" className="btn-primary w-full py-3 text-lg">
+                  <button 
+                    type="submit" 
+                    className="w-full py-4 text-lg font-semibold text-white bg-navy-blue hover:bg-opacity-90 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-yellow shadow-md hover:shadow-lg"
+                  >
                     Send Message
                   </button>
                 </form>
@@ -180,7 +136,7 @@ export default function ContactPage() {
               <h2 className="text-3xl font-bold mb-6 text-navy-blue">Find Us</h2>
 
               {/* Map */}
-              <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8 border border-gray-100 transition-all duration-300 hover:shadow-xl">
                 <div className="h-64 lg:h-80">
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3804.8!2d78.2644!3d17.5449!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDMyJzQxLjYiTiA3OMKwMTUnNTEuOCJF!5e0!3m2!1sen!2sin!4v1234567890"
@@ -190,43 +146,62 @@ export default function ContactPage() {
                     allowFullScreen
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
+                    className="rounded-b-xl"
                   ></iframe>
                 </div>
               </div>
 
               {/* Additional Information */}
-              <div className="bg-white p-8 rounded-lg shadow-lg">
-                <h3 className="text-xl font-bold mb-4 text-navy-blue">Why Choose Us?</h3>
-                <ul className="space-y-3">
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-primary-yellow rounded-full mt-2"></div>
+              <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 transition-all duration-300 hover:shadow-xl">
+                <h3 className="text-2xl font-bold mb-6 text-navy-blue">Why Choose Us?</h3>
+                <ul className="space-y-4">
+                  <li className="flex items-start space-x-3 group">
+                    <div className="w-6 h-6 bg-primary-yellow/10 rounded-lg flex items-center justify-center mt-0.5 group-hover:bg-primary-yellow/20 transition-colors duration-200">
+                      <div className="w-1.5 h-1.5 bg-primary-yellow rounded-full"></div>
+                    </div>
                     <span className="text-gray-700">RERA Registered Company (A01100003667)</span>
                   </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-primary-yellow rounded-full mt-2"></div>
+                  <li className="flex items-start space-x-3 group">
+                    <div className="w-6 h-6 bg-primary-yellow/10 rounded-lg flex items-center justify-center mt-0.5 group-hover:bg-primary-yellow/20 transition-colors duration-200">
+                      <div className="w-1.5 h-1.5 bg-primary-yellow rounded-full"></div>
+                    </div>
                     <span className="text-gray-700">10+ Years of Industry Experience</span>
                   </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-primary-yellow rounded-full mt-2"></div>
+                  <li className="flex items-start space-x-3 group">
+                    <div className="w-6 h-6 bg-primary-yellow/10 rounded-lg flex items-center justify-center mt-0.5 group-hover:bg-primary-yellow/20 transition-colors duration-200">
+                      <div className="w-1.5 h-1.5 bg-primary-yellow rounded-full"></div>
+                    </div>
                     <span className="text-gray-700">500+ Satisfied Customers</span>
                   </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-primary-yellow rounded-full mt-2"></div>
+                  <li className="flex items-start space-x-3 group">
+                    <div className="w-6 h-6 bg-primary-yellow/10 rounded-lg flex items-center justify-center mt-0.5 group-hover:bg-primary-yellow/20 transition-colors duration-200">
+                      <div className="w-1.5 h-1.5 bg-primary-yellow rounded-full"></div>
+                    </div>
                     <span className="text-gray-700">Transparent Dealings & Clear Documentation</span>
                   </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-primary-yellow rounded-full mt-2"></div>
+                  <li className="flex items-start space-x-3 group">
+                    <div className="w-6 h-6 bg-primary-yellow/10 rounded-lg flex items-center justify-center mt-0.5 group-hover:bg-primary-yellow/20 transition-colors duration-200">
+                      <div className="w-1.5 h-1.5 bg-primary-yellow rounded-full"></div>
+                    </div>
                     <span className="text-gray-700">End-to-End Property Solutions</span>
                   </li>
                 </ul>
 
-                <div className="mt-6 pt-6 border-t">
-                  <h4 className="font-semibold mb-3 text-navy-blue">Follow Us</h4>
-                  <div className="flex space-x-4">
-                    <Facebook className="w-6 h-6 text-gray-600 hover:text-primary-yellow cursor-pointer" />
-                    <Twitter className="w-6 h-6 text-gray-600 hover:text-primary-yellow cursor-pointer" />
-                    <Instagram className="w-6 h-6 text-gray-600 hover:text-primary-yellow cursor-pointer" />
-                    <Youtube className="w-6 h-6 text-gray-600 hover:text-primary-yellow cursor-pointer" />
+                <div className="mt-8 pt-6 border-t border-gray-100">
+                  <h4 className="font-semibold mb-4 text-navy-blue text-lg">Follow Us</h4>
+                  <div className="flex space-x-3">
+                    <a href="#" className="w-10 h-10 rounded-lg bg-gray-50 hover:bg-primary-yellow/10 flex items-center justify-center transition-colors duration-200 group">
+                      <Facebook className="w-5 h-5 text-gray-600 group-hover:text-primary-yellow transition-colors duration-200" />
+                    </a>
+                    <a href="#" className="w-10 h-10 rounded-lg bg-gray-50 hover:bg-primary-yellow/10 flex items-center justify-center transition-colors duration-200 group">
+                      <Twitter className="w-5 h-5 text-gray-600 group-hover:text-primary-yellow transition-colors duration-200" />
+                    </a>
+                    <a href="#" className="w-10 h-10 rounded-lg bg-gray-50 hover:bg-primary-yellow/10 flex items-center justify-center transition-colors duration-200 group">
+                      <Instagram className="w-5 h-5 text-gray-600 group-hover:text-primary-yellow transition-colors duration-200" />
+                    </a>
+                    <a href="#" className="w-10 h-10 rounded-lg bg-gray-50 hover:bg-primary-yellow/10 flex items-center justify-center transition-colors duration-200 group">
+                      <Youtube className="w-5 h-5 text-gray-600 group-hover:text-primary-yellow transition-colors duration-200" />
+                    </a>
                   </div>
                 </div>
               </div>
@@ -235,7 +210,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section - Temporarily commented out
       <section className="section-padding bg-navy text-white">
         <div className="container text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Invest in Your Dream Property?</h2>
@@ -254,6 +229,76 @@ export default function ContactPage() {
               <Mail className="w-5 h-5" />
               <span>Email Us</span>
             </a>
+          </div>
+        </div>
+      </section>
+      */}
+
+      {/* Contact Information - Moved to bottom */}
+      <section className="section-padding bg-white">
+        <div className="container">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4 text-navy-blue">Our Contact Information</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Reach out to us through any of these channels
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="text-center p-8 bg-white rounded-2xl border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="w-20 h-20 bg-primary-yellow/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group">
+                <div className="w-16 h-16 bg-primary-yellow rounded-xl flex items-center justify-center transition-all duration-300 group-hover:rotate-6">
+                  <Phone className="w-7 h-7 text-navy-blue" />
+                </div>
+              </div>
+              <h3 className="text-xl font-bold mb-4 text-navy-blue">Phone</h3>
+              <div className="space-y-2">
+                <a href="tel:+919866663349" className="block text-gray-600 hover:text-primary-yellow transition-colors text-base">+91 98666 63349</a>
+                <a href="tel:+917893515501" className="block text-gray-600 hover:text-primary-yellow transition-colors text-base">+91 78935 15501</a>
+              </div>
+            </div>
+
+            <div className="text-center p-8 bg-white rounded-2xl border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="w-20 h-20 bg-primary-yellow/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group">
+                <div className="w-16 h-16 bg-primary-yellow rounded-xl flex items-center justify-center transition-all duration-300 group-hover:rotate-6">
+                  <Mail className="w-7 h-7 text-navy-blue" />
+                </div>
+              </div>
+              <h3 className="text-xl font-bold mb-4 text-navy-blue">Email</h3>
+              <div className="space-y-2">
+                <a href="mailto:info@srisanari.com" className="block text-gray-600 hover:text-primary-yellow transition-colors text-sm">info@srisanari.com</a>
+                <a href="mailto:srisanari.raju@gmail.com" className="block text-gray-600 hover:text-primary-yellow transition-colors text-sm">srisanari.raju@gmail.com</a>
+              </div>
+            </div>
+
+            <div className="text-center p-8 bg-white rounded-2xl border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="w-20 h-20 bg-primary-yellow/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group">
+                <div className="w-16 h-16 bg-primary-yellow rounded-xl flex items-center justify-center transition-all duration-300 group-hover:rotate-6">
+                  <MapPin className="w-7 h-7 text-navy-blue" />
+                </div>
+              </div>
+              <h3 className="text-xl font-bold mb-4 text-navy-blue">Address</h3>
+              <address className="text-gray-600 text-sm not-italic">
+                Villa #748, Symphony Park Homes,
+                <br className="hidden sm:block" />
+                Beeramguda, Patancheru,
+                <br className="hidden sm:block" />
+                Sangareddy, Hyd, TS - 502319
+              </address>
+            </div>
+
+            <div className="text-center p-8 bg-white rounded-2xl border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="w-20 h-20 bg-primary-yellow/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group">
+                <div className="w-16 h-16 bg-primary-yellow rounded-xl flex items-center justify-center transition-all duration-300 group-hover:rotate-6">
+                  <Clock className="w-7 h-7 text-navy-blue" />
+                </div>
+              </div>
+              <h3 className="text-xl font-bold mb-4 text-navy-blue">Office Hours</h3>
+              <div className="space-y-2 text-gray-600">
+                <p className="text-base">Mon - Sat: 9:00 AM - 7:00 PM</p>
+                <p className="text-base">Sunday: 10:00 AM - 5:00 PM</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
