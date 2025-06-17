@@ -1,28 +1,30 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import Header from "../src/components/Header";
-import Footer from "../src/components/Footer";
+import type React from "react"
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import "./globals.css"
+import Header from "@/components/Header"
+import Footer from "@/components/Footer"
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "SRI SANARI SHANKARA INFRA AND MARKETING",
-  description: "Premium Real Estate Solutions in Hyderabad",
-};
+  title: "SRI SANARI SHANKARA INFRA AND MARKETING - Premium Real Estate",
+  description: "Premium plots at affordable prices. Your trusted partner in real estate development.",
+    generator: 'v0.dev'
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-white text-gray-900`}>
+      <body className={inter.className}>
         <Header />
-        <main className="min-h-screen">{children}</main>
+        <main>{children}</main>
         <Footer />
       </body>
     </html>
-  );
+  )
 }

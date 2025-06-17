@@ -1,21 +1,21 @@
-import Hero from '../src/components/Hero';
-import IntroSection from '../src/components/IntroSection';
-import ServicesSection from '../src/components/ServicesSection';
-import PropertiesSection from '../src/components/PropertiesSection';
-import ProjectsSection from '../src/components/ProjectsSection';
-import ContactSection from '../src/components/ContactSection';
-import MapSection from '../src/components/MapSection';
+import HeroSection from "@/components/home/HeroSection"
+import IntroSection from "@/components/home/IntroSection"
+import PartnerSection from "@/components/home/PartnerSection"
+import InvestmentProperties from "@/components/home/InvestmentProperties"
+import TopProperties from "@/components/home/TopProperties"
+import LatestProjects from "@/components/home/LatestProjects"
+import ContactSection from "@/components/home/ContactSection"
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="pt-16">
-      <Hero />
+    <>
+      <HeroSection />
       <IntroSection />
-      <ServicesSection />
-      <PropertiesSection />
-      <ProjectsSection />
+      <PartnerSection />
+      <InvestmentProperties />
+      <TopProperties />
+      <LatestProjects />
       <ContactSection />
-      <MapSection />
-    </div>
-  );
+    </>
+  )
 }
