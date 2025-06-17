@@ -21,12 +21,16 @@ export default function Header() {
       <div className="container">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <div className="text-white font-bold text-xl">SRI SANARI</div>
+          <Link href="/" className="flex items-center flex-shrink-0">
+            <img 
+              src="/images/navbar-logo.png" 
+              alt="SRI SANARI Logo" 
+              className="h-14 w-auto object-contain"
+            />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2">
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -40,14 +44,8 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Social Icons & Phone */}
-          <div className="hidden lg:flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <Facebook className="w-5 h-5 text-white hover:text-primary-yellow cursor-pointer" />
-              <Twitter className="w-5 h-5 text-white hover:text-primary-yellow cursor-pointer" />
-              <Instagram className="w-5 h-5 text-white hover:text-primary-yellow cursor-pointer" />
-              <Youtube className="w-5 h-5 text-white hover:text-primary-yellow cursor-pointer" />
-            </div>
+          {/* Phone Number */}
+          <div className="hidden lg:flex items-center">
             <a href="tel:+919866663349" className="btn-primary flex items-center space-x-2">
               <Phone className="w-4 h-4" />
               <span>+91 98666 63349</span>
