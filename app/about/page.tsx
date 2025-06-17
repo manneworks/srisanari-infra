@@ -43,7 +43,7 @@ export default function AboutPage() {
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">About SRI SANARI SHANKARA INFRA</h1>
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center lg:text-left">About SRI SANARI SHANKARA INFRA</h1>
               <p className="text-xl text-gray-300 mb-8 leading-relaxed">
                 Building dreams, creating communities, and shaping the future of real estate development in Telangana
                 with integrity, innovation, and excellence.
@@ -93,10 +93,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Our Values */}
+      {/* Our Values - Timeline */}
       <section className="section-padding bg-light">
         <div className="container">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4 text-navy-blue">Our Core Values</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               These values guide everything we do and shape the way we interact with our customers, partners, and
@@ -104,62 +104,29 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, index) => (
-              <div
-                key={index}
-                className="bg-white p-8 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow"
-              >
-                <div className="w-16 h-16 bg-primary-yellow rounded-full flex items-center justify-center mx-auto mb-6">
-                  <value.icon className="w-8 h-8 text-navy-blue" />
+          <div className="relative max-w-4xl mx-auto">
+            {/* Vertical line - Hidden on mobile, shown on md+ */}
+            <div className="hidden md:block absolute left-1/2 w-0.5 h-full bg-gray-200 transform -translate-x-1/2"></div>
+            
+            {/* Timeline items */}
+            <div className="space-y-16 md:space-y-24">
+              {values.map((value, index) => (
+                <div 
+                  key={index}
+                  className={`relative flex flex-col md:flex-row ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center md:items-start`}
+                >
+                  {/* Content - Full width on mobile, 5/12 on desktop */}
+                  <div className={`w-full md:w-5/12 text-center md:text-left ${index % 2 === 0 ? 'md:pr-12' : 'md:pl-12'} ${index === 0 ? 'pt-0 md:pt-8' : ''} order-2 md:order-none`}>
+                    <h3 className="text-xl font-bold text-navy-blue mb-2">{value.title}</h3>
+                    <p className="text-gray-600 max-w-md mx-auto md:mx-0">{value.description}</p>
+                  </div>
+                  
+                  {/* Icon in circle - Center on mobile, positioned on line for desktop */}
+                  <div className={`relative z-10 w-16 h-16 bg-primary-yellow rounded-full flex items-center justify-center mx-auto mb-4 md:mb-0 md:absolute md:left-1/2 transform md:-translate-x-1/2 ${index === 0 ? 'md:mt-8' : ''} ${index % 2 === 0 ? 'md:translate-y-0' : 'md:translate-y-0'}`}>
+                    <value.icon className="w-6 h-6 text-navy-blue" />
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-navy-blue">{value.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{value.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Leadership Team */}
-      <section className="section-padding bg-white">
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4 text-navy-blue">Our Leadership</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Meet the visionary leaders who drive our company's success and innovation.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="bg-gray-50 p-8 rounded-lg text-center">
-              <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-6"></div>
-              <h3 className="text-xl font-bold mb-2 text-navy-blue">Mr. Raju</h3>
-              <p className="text-primary-yellow font-semibold mb-4">Founder & CEO</p>
-              <p className="text-gray-600">
-                Visionary leader with over 15 years of experience in real estate development and a passion for creating
-                quality living spaces.
-              </p>
-            </div>
-
-            <div className="bg-gray-50 p-8 rounded-lg text-center">
-              <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-6"></div>
-              <h3 className="text-xl font-bold mb-2 text-navy-blue">Mrs. Sanari</h3>
-              <p className="text-primary-yellow font-semibold mb-4">Co-Founder & Director</p>
-              <p className="text-gray-600">
-                Strategic planner and operations expert who ensures smooth execution of all projects and maintains
-                quality standards.
-              </p>
-            </div>
-
-            <div className="bg-gray-50 p-8 rounded-lg text-center">
-              <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-6"></div>
-              <h3 className="text-xl font-bold mb-2 text-navy-blue">Mr. Shankara</h3>
-              <p className="text-primary-yellow font-semibold mb-4">Technical Director</p>
-              <p className="text-gray-600">
-                Engineering expert with extensive knowledge in construction and infrastructure development, ensuring
-                technical excellence.
-              </p>
+              ))}
             </div>
           </div>
         </div>
@@ -204,6 +171,50 @@ export default function AboutPage() {
               <h3 className="text-xl font-bold mb-4">Expert Support</h3>
               <p className="text-gray-300">
                 Our experienced team provides end-to-end support from property selection to registration and beyond.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Leadership Team */}
+      <section className="section-padding bg-white">
+        <div className="container">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4 text-navy-blue">Our Leadership</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Meet the visionary leaders who drive our company's success and innovation.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="bg-gray-50 p-8 rounded-lg text-center">
+              <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-6"></div>
+              <h3 className="text-xl font-bold mb-2 text-navy-blue">Mr. Raju</h3>
+              <p className="text-primary-yellow font-semibold mb-4">Founder & CEO</p>
+              <p className="text-gray-600">
+                Visionary leader with over 15 years of experience in real estate development and a passion for creating
+                quality living spaces.
+              </p>
+            </div>
+
+            <div className="bg-gray-50 p-8 rounded-lg text-center">
+              <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-6"></div>
+              <h3 className="text-xl font-bold mb-2 text-navy-blue">Mrs. Sanari</h3>
+              <p className="text-primary-yellow font-semibold mb-4">Co-Founder & Director</p>
+              <p className="text-gray-600">
+                Strategic planner and operations expert who ensures smooth execution of all projects and maintains
+                quality standards.
+              </p>
+            </div>
+
+            <div className="bg-gray-50 p-8 rounded-lg text-center">
+              <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-6"></div>
+              <h3 className="text-xl font-bold mb-2 text-navy-blue">Mr. Shankara</h3>
+              <p className="text-primary-yellow font-semibold mb-4">Technical Director</p>
+              <p className="text-gray-600">
+                Engineering expert with extensive knowledge in construction and infrastructure development, ensuring
+                technical excellence.
               </p>
             </div>
           </div>
