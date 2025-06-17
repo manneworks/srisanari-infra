@@ -10,7 +10,7 @@ A modern real estate website built with Next.js, TypeScript, and Tailwind CSS.
 - Project showcase with status tracking
 - Contact form with validation
 - FAQ section
-- Google Maps integration
+- Google Maps integration.
 
 ## Tech Stack
 
