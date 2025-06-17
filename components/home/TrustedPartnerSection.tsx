@@ -54,7 +54,7 @@ export default function TrustedPartnerSection() {
           
           <Link 
             href="/about" 
-            className="inline-block bg-navy-blue text-white px-8 py-3 rounded-lg font-medium hover:bg-opacity-90 transition-all"
+            className="btn-primary"
           >
             Learn More About Us
           </Link>

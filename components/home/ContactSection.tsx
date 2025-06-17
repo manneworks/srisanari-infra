@@ -8,7 +8,6 @@ import { ChevronDown, ChevronUp } from "lucide-react"
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: "",
-    phone: "",
     email: "",
     message: "",
   })
@@ -48,7 +47,7 @@ export default function ContactSection() {
     // Handle form submission
     console.log("Form submitted:", formData)
     alert("Thank you for your inquiry! We will contact you soon.")
-    setFormData({ name: "", phone: "", email: "", message: "" })
+    setFormData({ name: "", email: "", message: "" })
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -59,78 +58,88 @@ export default function ContactSection() {
   }
 
   return (
-    <section className="section-padding bg-navy text-white">
+    <section className="section-padding bg-white">
       <div className="container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <div>
-            <h2 className="text-3xl font-bold mb-6">Contact Us Today</h2>
-            <p className="text-gray-300 mb-8">
-              Ready to invest in your dream property? Get in touch with our experts today.
-            </p>
+          <div className="bg-navy rounded-xl shadow-lg p-8 text-white flex flex-col h-full">
+            <div>
+              <h2 className="text-3xl font-bold mb-4">Contact Us Today</h2>
+              <p className="text-gray-300 mb-8">
+                Ready to invest in your dream property? Get in touch with our experts today.
+              </p>
+            </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Your Name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 bg-white text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow"
-                />
+            <form onSubmit={handleSubmit} className="space-y-6 flex-grow flex flex-col">
+              <div className="space-y-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-200 mb-2">
+                    Your Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent placeholder-gray-400"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email address"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent placeholder-gray-400"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-200 mb-2">
+                    Your Message
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    placeholder="Type your message here..."
+                    rows={4}
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent resize-none placeholder-gray-400"
+                  ></textarea>
+                </div>
               </div>
-              <div>
-                <input
-                  type="tel"
-                  name="phone"
-                  placeholder="Phone Number"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 bg-white text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow"
-                />
+              <div className="mt-auto">
+                <button
+                  type="submit"
+                  className="w-full btn-primary py-3 px-6 text-lg"
+                >
+                  Send Message
+                </button>
               </div>
-              <div>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email Address"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 bg-white text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow"
-                />
-              </div>
-              <div>
-                <textarea
-                  name="message"
-                  placeholder="Your Message"
-                  rows={4}
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 bg-white text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow resize-none"
-                ></textarea>
-              </div>
-              <button type="submit" className="btn-primary w-full py-3 text-lg">
-                Send Message
-              </button>
             </form>
           </div>
 
           {/* FAQ Section */}
-          <div>
+          <div className="text-white">
             <h2 className="text-3xl font-bold mb-6 text-primary-yellow">Frequently Asked Questions</h2>
             <div className="space-y-4">
               {faqs.map((faq, index) => (
-                <div key={index} className="bg-gray-800 rounded-lg overflow-hidden">
+                <div key={index} className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
                   <button
-                    className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-700 transition-colors"
+                    className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-700 transition-colors text-white"
                     onClick={() => setOpenFaq(openFaq === index ? null : index)}
                   >
-                    <span className="font-semibold">{faq.question}</span>
+                    <span className="font-semibold text-white">{faq.question}</span>
                     {openFaq === index ? (
                       <ChevronUp className="w-5 h-5 text-primary-yellow" />
                     ) : (
@@ -139,7 +148,7 @@ export default function ContactSection() {
                   </button>
                   {openFaq === index && (
                     <div className="px-6 pb-4">
-                      <p className="text-gray-300 leading-relaxed">{faq.answer}</p>
+                      <p className="text-gray-200 leading-relaxed">{faq.answer}</p>
                     </div>
                   )}
                 </div>

@@ -5,69 +5,71 @@ export default function LatestProjects() {
   const projects = [
     {
       title: "Open Plots",
-      subtitle: "Premium Residential Plots",
-      image: "/placeholder.svg?height=300&width=400",
+      location: "Maheshwaram, Tukkaguda",
+      image: "/images/home-page/our-latest-projects/plot1.jpeg",
       link: "/projects/open-plots",
     },
     {
-      title: "Development Plots",
-      subtitle: "Ready to Build Plots",
-      image: "/placeholder.svg?height=300&width=400",
-      link: "/projects/development-plots",
+      title: "Development Lands",
+      location: "Hyderabad, Shadnagar",
+      image: "/images/home-page/our-latest-projects/plot2.jpg",
+      link: "/projects/development-lands",
     },
     {
       title: "Farm Lands",
-      subtitle: "Agricultural Properties",
-      image: "/placeholder.svg?height=300&width=400",
+      location: "Maheshwaram, Shamshabad",
+      image: "/images/home-page/our-latest-projects/plot3.avif",
       link: "/projects/farm-lands",
     },
     {
-      title: "Apartments/ Flats",
-      subtitle: "Modern Living Spaces",
-      image: "/placeholder.svg?height=300&width=400",
-      link: "/projects/apartments",
+      title: "Apartments/Villas",
+      location: "Hyderabad",
+      image: "/images/home-page/our-latest-projects/plot4.jpg",
+      link: "/projects/apartments-villas",
     },
   ]
 
   return (
-    <section className="section-padding bg-white">
-      <div className="container">
-        <div className="flex justify-between items-center mb-12">
-          <div>
-            <h2 className="text-3xl font-bold text-navy-blue">Our Latest Projects</h2>
-            <p className="text-gray-600 mt-2">Discover our newest developments and opportunities</p>
+    <section className="py-16 bg-white">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
+          <div className="text-left">
+            <h2 className="text-3xl md:text-4xl font-bold text-navy-blue mb-2">Our Latest Projects</h2>
+            <p className="text-gray-600 text-lg">
+              Discover our premium properties and investment opportunities
+            </p>
           </div>
-          <Link href="/projects" className="btn-primary hidden md:inline-block">
+          <Link 
+            href="/projects" 
+            className="btn-primary whitespace-nowrap"
+          >
             View All Projects
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="flex space-x-6 overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide">
           {projects.map((project, index) => (
-            <Link key={index} href={project.link} className="group">
-              <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group-hover:transform group-hover:scale-105">
-                <div className="relative h-48">
+            <div 
+              key={index} 
+              className="flex-none w-[300px] sm:w-[350px] md:w-full md:flex-1 h-[500px] relative rounded-2xl overflow-hidden group"
+            >
+              <Link href={project.link} className="block h-full">
+                <div className="absolute inset-0">
                   <Image
-                    src={project.image || "/placeholder.svg"}
+                    src={project.image}
                     alt={project.title}
                     fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-300"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-all duration-300"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h3 className="text-lg font-bold">{project.title}</h3>
-                    <p className="text-sm opacity-90">{project.subtitle}</p>
-                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-90"></div>
                 </div>
-              </div>
-            </Link>
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-center text-white flex flex-col items-center justify-end min-h-[150px]">
+                  <h3 className="text-2xl font-bold mb-2 w-full whitespace-nowrap">{project.title}</h3>
+                  <p className="text-gray-200 w-full">{project.location}</p>
+                </div>
+              </Link>
+            </div>
           ))}
-        </div>
-
-        <div className="text-center mt-8 md:hidden">
-          <Link href="/projects" className="btn-primary">
-            View All Projects
-          </Link>
         </div>
       </div>
     </section>

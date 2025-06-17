@@ -19,7 +19,7 @@ export default function PartnerSection() {
               Our commitment to quality, transparency, and customer satisfaction has made us the preferred choice for
               thousands of satisfied customers across Telangana.
             </p>
-            <button className="btn-primary">Learn More About Us</button>
+            <button className="btn-primary whitespace-nowrap">Learn More About Us</button>
           </div>
 
           {/* Services Offered */}
