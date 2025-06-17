@@ -1,6 +1,6 @@
 export default function InvestmentProperties() {
   return (
-    <section className="section-padding bg-white">
+    <section className="pt-16 pb-24 bg-white">
       <div className="container">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4 text-navy-blue">Best Investment Properties</h2>
@@ -55,22 +55,6 @@ export default function InvestmentProperties() {
             </div>
 
             <button className="btn-primary">Get Started Today</button>
-          </div>
-        </div>
-
-        {/* Additional Video */}
-        <div className="max-w-4xl mx-auto">
-          <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
-            <iframe
-              width="100%"
-              height="100%"
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-              title="Company Overview Video"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-            ></iframe>
           </div>
         </div>
       </div>

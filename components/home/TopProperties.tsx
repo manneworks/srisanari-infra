@@ -53,17 +53,23 @@ export default function TopProperties() {
           {properties.map((property, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+              className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100"
             >
-              <div className="relative h-48">
+              <div className="relative h-48 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/10 z-10"></div>
                 <Image src={property.image || "/placeholder.svg"} alt={property.title} fill className="object-cover" />
               </div>
-              <div className="p-6">
+              <div className="p-6 flex flex-col h-[calc(100%-12rem)]">
                 <h3 className="text-xl font-bold mb-3 text-navy-blue">{property.title}</h3>
-                <p className="text-gray-600 mb-4 leading-relaxed">{property.description}</p>
-                <Link href={property.link} className="text-primary-yellow font-semibold hover:underline">
-                  View Properties →
-                </Link>
+                <p className="text-gray-600 mb-6 leading-relaxed flex-grow">{property.description}</p>
+                <div className="mt-auto">
+                  <Link 
+                    href={property.link}
+                    className="inline-block px-5 py-2.5 bg-navy text-white font-medium rounded-xl hover:bg-opacity-90 transition-all duration-200 hover:shadow-sm active:scale-95"
+                  >
+                    View Properties
+                  </Link>
+                </div>
               </div>
             </div>
           ))}
