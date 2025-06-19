@@ -8,6 +8,7 @@ import { Filter, MapPin, Calendar } from "lucide-react"
 export default function ProjectsPage() {
   const [activeFilter, setActiveFilter] = useState("all")
   const [selectedType, setSelectedType] = useState("all")
+  const [showMobileFilters, setShowMobileFilters] = useState(false)
 
   const filters = [
     { id: "all", label: "All Projects" },
@@ -117,43 +118,72 @@ export default function ProjectsPage() {
         </div>
       </section>
 
+      {/* Mobile Filter Toggle */}
+      <div className="lg:hidden bg-white border-b">
+        <div className="container py-4">
+          <button 
+            onClick={() => setShowMobileFilters(!showMobileFilters)}
+            className="flex items-center space-x-2 text-navy-blue font-medium"
+          >
+            <Filter className="w-5 h-5" />
+            <span>Filter Projects</span>
+          </button>
+        </div>
+      </div>
+
       {/* Filters */}
-      <section className="py-8 bg-white border-b">
+      <section className={`${showMobileFilters ? 'block' : 'hidden lg:block'} py-4 lg:py-8 bg-white border-b`}>
         <div className="container">
-          <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
+          <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:gap-6 lg:items-center lg:justify-between">
             {/* Status Filters */}
-            <div className="flex items-center space-x-4">
-              <Filter className="w-5 h-5 text-gray-600" />
-              <div className="flex space-x-2">
-                {filters.map((filter) => (
-                  <button
-                    key={filter.id}
-                    onClick={() => setActiveFilter(filter.id)}
-                    className={`px-4 py-2 rounded-full font-medium transition-colors ${
-                      activeFilter === filter.id
-                        ? "bg-primary-yellow text-navy-blue"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                    }`}
-                  >
-                    {filter.label}
-                  </button>
-                ))}
+            <div className="w-full lg:w-auto">
+              <div className="flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:items-center lg:space-x-4">
+                <span className="text-sm font-medium text-gray-700 lg:hidden">Status</span>
+                <div className="flex flex-wrap gap-2">
+                  {filters.map((filter) => (
+                    <button
+                      key={filter.id}
+                      onClick={() => setActiveFilter(filter.id)}
+                      className={`px-3 py-1.5 text-sm lg:px-4 lg:py-2 rounded-full font-medium transition-colors ${
+                        activeFilter === filter.id
+                          ? "bg-primary-yellow text-navy-blue"
+                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      }`}
+                    >
+                      {filter.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
             {/* Property Type Filter */}
-            <div className="flex items-center space-x-4">
-              <select
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow"
+            <div className="w-full lg:w-auto">
+              <div className="flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:items-center lg:space-x-4">
+                <label htmlFor="property-type" className="text-sm font-medium text-gray-700 lg:hidden">Property Type</label>
+                <select
+                  id="property-type"
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all duration-200 cursor-pointer"
+                >
+                  {propertyTypes.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {type.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Apply Button (Mobile Only) */}
+            <div className="lg:hidden pt-2">
+              <button 
+                onClick={() => setShowMobileFilters(false)}
+                className="w-full py-2.5 bg-primary-yellow text-navy-blue font-medium rounded-xl hover:bg-yellow-500 transition-colors"
               >
-                {propertyTypes.map((type) => (
-                  <option key={type.id} value={type.id}>
-                    {type.label}
-                  </option>
-                ))}
-              </select>
+                Apply Filters
+              </button>
             </div>
           </div>
         </div>
@@ -166,7 +196,7 @@ export default function ProjectsPage() {
             {filteredProjects.map((project) => (
               <div
                 key={project.id}
-                className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col h-full"
               >
                 <div className="relative h-48">
                   <Image src={project.image || "/placeholder.svg"} alt={project.title} fill className="object-cover" />
@@ -186,7 +216,7 @@ export default function ProjectsPage() {
                   </div>
                 </div>
 
-                <div className="p-6">
+                <div className="p-6 flex-1 flex flex-col">
                   <h3 className="text-xl font-bold mb-2 text-navy-blue">{project.title}</h3>
 
                   <div className="flex items-center text-gray-600 mb-2">
@@ -201,29 +231,34 @@ export default function ProjectsPage() {
 
                   <div className="mb-4">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-2xl font-bold text-primary-yellow">{project.price}</span>
-                      <span className="text-gray-600">{project.area}</span>
+                      <span className="text-xl font-medium text-primary-yellow">{project.price}</span>
+                      <span className="text-gray-600 text-sm">{project.area}</span>
                     </div>
                   </div>
 
-                  <div className="mb-6">
-                    <div className="flex flex-wrap gap-2">
-                      {project.features.slice(0, 3).map((feature, index) => (
-                        <span key={index} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                          {feature}
-                        </span>
-                      ))}
-                      {project.features.length > 3 && (
-                        <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                          +{project.features.length - 3} more
-                        </span>
-                      )}
+                  <div className="mt-auto">
+                    <div className="mb-6">
+                      <div className="flex flex-wrap gap-2">
+                        {project.features.slice(0, 3).map((feature, index) => (
+                          <span key={index} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+                            {feature}
+                          </span>
+                        ))}
+                        {project.features.length > 3 && (
+                          <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+                            +{project.features.length - 3} more
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
 
-                  <Link href={`/projects/${project.id}`} className="btn-primary w-full text-center block">
-                    View Details
-                  </Link>
+                    <Link 
+                      href={`/projects/${project.id}`} 
+                      className="btn-primary w-full text-center block mt-4"
+                    >
+                      View Details
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}

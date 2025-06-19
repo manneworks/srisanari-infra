@@ -9,17 +9,17 @@ const slides = [
   {
     title: "Premium Plots At Affordable Price",
     description: "Start Your Dream Home Journey With Us",
-    image: "/placeholder.svg?height=800&width=1200&query=aerial%20view%20of%20plotted%20land%20development%20with%20roads%20and%20green%20spaces",
+    image: "/images/home-page/hero-section/img1.jpg",
   },
   {
     title: "Prime Location Plots",
     description: "Invest in the most sought-after locations",
-    image: "/placeholder.svg?height=800&width=1200&query=modern%20housing%20development",
+    image: "/images/home-page/hero-section/img2.jpg",
   },
   {
     title: "Luxury Living Awaits",
     description: "Experience the perfect blend of comfort and style",
-    image: "/placeholder.svg?height=800&width=1200&query=luxury%20villa%20estate",
+    image: "/images/home-page/hero-section/img3.jpg",
   },
 ]
 
