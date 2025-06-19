@@ -1,98 +1,14 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { MapPin, Calendar, TrendingUp, Phone, Mail, X, ChevronLeft, ChevronRight } from "lucide-react"
+import { MapPin, Calendar, Phone, Mail, X, ChevronLeft, ChevronRight, TrendingUp } from "lucide-react"
+import { Project } from "@/data/types"
+import { getProjectById, getSuggestedProjects } from "@/data/projects"
+import { getStatusStyles } from "./utils"
 
-// Mock project data - in real app, this would come from API/database
-const getProjectById = (id: string) => {
-  const projects = {
-    "1": {
-      id: 1,
-      title: "Sri Sanari Green Valley",
-      type: "Residential Plots",
-      status: "Ongoing",
-      location: "Patancheru, Sangareddy",
-      price: "₹15,000 per sq.yd",
-      area: "150-300 sq.yd",
-      completion: "2024",
-      description:
-        "Sri Sanari Green Valley is a premium residential plot development located in the heart of Patancheru. This RERA-approved project offers well-planned plots with modern infrastructure and excellent connectivity to Hyderabad city.",
-      images: [
-        "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600",
-      ],
-      specifications: {
-        "Plot Sizes": "150, 200, 250, 300 sq.yd",
-        "Total Area": "25 Acres",
-        "Total Plots": "180 Plots",
-        "150, 200, 250, 300 sq.yd',\
-        'Total Area": "25 Acres",
-        "Total Plots": "180 Plots",
-        "Road Width": "30 & 40 feet",
-        Approval: "RERA Approved",
-        Possession: "Immediate",
-        Registration: "Clear Title",
-      },
-      amenities: [
-        "Gated Community with 24/7 Security",
-        "Underground Electricity",
-        "Water Supply Connection",
-        "Sewerage System",
-        "Street Lighting",
-        "Park & Recreation Area",
-        "Children's Play Area",
-        "Community Hall",
-        "Jogging Track",
-        "Landscaped Gardens",
-      ],
-      locationAdvantages: [
-        "15 minutes from Patancheru Railway Station",
-        "20 minutes from HITEC City",
-        "10 minutes from National Highway",
-        "Close to reputed schools and colleges",
-        "Near hospitals and medical facilities",
-        "Shopping malls and markets nearby",
-        "Excellent public transportation",
-        "Rapid development area",
-      ],
-    },
-  }
-
-  return projects[id as keyof typeof projects] || null
-}
-
-const suggestedProjects = [
-  {
-    id: 2,
-    title: "Shankara Commercial Hub",
-    location: "Miyapur, Hyderabad",
-    price: "₹25,000 per sq.yd",
-    image: "/placeholder.svg?height=200&width=300",
-  },
-  {
-    id: 3,
-    title: "Infra Farm Lands",
-    location: "Medak District",
-    price: "₹5,000 per sq.yd",
-    image: "/placeholder.svg?height=200&width=300",
-  },
-  {
-    id: 4,
-    title: "Sanari Heights Apartments",
-    location: "Kondapur, Hyderabad",
-    price: "₹4,500 per sq.ft",
-    image: "/placeholder.svg?height=200&width=300",
-  },
-]
-
-export default function ProjectDetailPage({ params }: { params: { id: string } }) {
+export default async function ProjectDetailPage({ params }: { params: { id: string } }) {
   const [activeTab, setActiveTab] = useState("overview")
   const [selectedImage, setSelectedImage] = useState(0)
   const [showGallery, setShowGallery] = useState(false)
@@ -117,6 +33,29 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
     )
   }
 
+  const nextImage = () => {
+    setSelectedImage((prev) => (prev === project.images.length - 1 ? 0 : prev + 1))
+  }
+
+  const prevImage = () => {
+    setSelectedImage((prev) => (prev === 0 ? project.images.length - 1 : prev - 1))
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Handle form submission
+    alert('Thank you for your interest! We will contact you soon.')
+    setFormData({ name: '', phone: '', email: '', message: '' })
+  }
+
   const tabs = [
     { id: "overview", label: "Overview" },
     { id: "gallery", label: "Gallery" },
@@ -124,27 +63,6 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
     { id: "amenities", label: "Amenities" },
     { id: "location", label: "Location" },
   ]
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    alert("Thank you for your interest! We will contact you soon.")
-    setFormData({ name: "", phone: "", email: "", message: "" })
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
-  }
-
-  const nextImage = () => {
-    setSelectedImage((prev) => (prev + 1) % project.images.length)
-  }
-
-  const prevImage = () => {
-    setSelectedImage((prev) => (prev - 1 + project.images.length) % project.images.length)
-  }
 
   return (
     <div className="pt-20">
@@ -155,9 +73,8 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
             <div>
               <div className="flex items-center space-x-4 mb-4">
                 <span
-                  className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    project.status === "Completed" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"
-                  }`}
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${project.status === "Completed" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"
+                    }`}
                 >
                   {project.status}
                 </span>
@@ -178,7 +95,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                 <span>Expected Completion: {project.completion}</span>
               </div>
 
-              <div className="text-3xl font-bold text-primary-yellow mb-6">{project.price}</div>
+              <div className="text-2xl font-bold text-primary-yellow mb-6">{project.price}</div>
 
               <p className="text-gray-300 text-lg leading-relaxed">{project.description}</p>
             </div>
@@ -202,7 +119,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
         </div>
       </section>
 
-      {/* Navigation Tabs */}
+      {/* Navigation Tabs - Commented Out
       <section className="bg-white border-b sticky top-20 z-40">
         <div className="container">
           <div className="flex space-x-8 overflow-x-auto">
@@ -223,242 +140,287 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
         </div>
       </section>
 
-      {/* Tab Content */}
-      <section className="section-padding bg-light">
+      {/* Project Detail Layout */}
+      <section className="py-16 bg-gray-50">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Main Content */}
-            <div className="lg:col-span-2">
-              {activeTab === "overview" && (
+          <div className="space-y-8">
+            {/* Overview Section */}
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Left Column - Overview Text */}
                 <div>
-                  <h2 className="text-3xl font-bold mb-6 text-navy-blue">Project Overview</h2>
-                  <div className="bg-white p-8 rounded-lg shadow-lg">
-                    <p className="text-gray-600 text-lg leading-relaxed mb-6">{project.description}</p>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                      <div className="flex items-center space-x-3">
-                        <TrendingUp className="w-6 h-6 text-primary-yellow" />
+                  <h2 className="text-2xl font-bold text-navy-blue mb-6">Overview</h2>
+                  <p className="text-gray-600 leading-relaxed mb-6">{project.description}</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                      <div className="flex items-start space-x-3">
+                        <div className="bg-primary-yellow/10 p-2 rounded-lg">
+                          <TrendingUp className="w-5 h-5 text-primary-yellow" />
+                        </div>
                         <div>
-                          <h4 className="font-semibold">High Appreciation</h4>
-                          <p className="text-gray-600 text-sm">Expected 15-20% annual growth</p>
+                          <h3 className="text-sm font-semibold text-gray-800">High Appreciation</h3>
+                          <p className="text-xs text-gray-500">Expected 15-20% annual growth</p>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-3">
-                        <MapPin className="w-6 h-6 text-primary-yellow" />
+                    </div>
+                    
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                      <div className="flex items-start space-x-3">
+                        <div className="bg-blue-100 p-2 rounded-lg">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                          </svg>
+                        </div>
                         <div>
-                          <h4 className="font-semibold">Prime Location</h4>
-                          <p className="text-gray-600 text-sm">Excellent connectivity</p>
+                          <h3 className="text-sm font-semibold text-gray-800">RERA Approved</h3>
+                          <p className="text-xs text-gray-500">Legal & safe investment</p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="border-t pt-6">
-                      <h3 className="text-xl font-bold mb-4 text-navy-blue">Key Highlights</h3>
-                      <ul className="space-y-2">
-                        <li className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-primary-yellow rounded-full"></div>
-                          <span>RERA Approved Project</span>
-                        </li>
-                        <li className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-primary-yellow rounded-full"></div>
-                          <span>Clear Title & Documentation</span>
-                        </li>
-                        <li className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-primary-yellow rounded-full"></div>
-                          <span>Flexible Payment Options</span>
-                        </li>
-                        <li className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-primary-yellow rounded-full"></div>
-                          <span>Bank Loan Assistance Available</span>
-                        </li>
-                      </ul>
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                      <div className="flex items-start space-x-3">
+                        <div className="bg-green-100 p-2 rounded-lg">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-semibold text-gray-800">Flexible Payment</h3>
+                          <p className="text-xs text-gray-500">Easy EMI options available</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                      <div className="flex items-start space-x-3">
+                        <div className="bg-purple-100 p-2 rounded-lg">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-semibold text-gray-800">Prime Location</h3>
+                          <p className="text-xs text-gray-500">Excellent connectivity</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              )}
-
-              {activeTab === "gallery" && (
+                {/* Right Column - Gallery */}
                 <div>
-                  <h2 className="text-3xl font-bold mb-6 text-navy-blue">Project Gallery</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {project.images.map((image, index) => (
-                      <div key={index} className="relative h-48 cursor-pointer group">
+                  <h2 className="text-2xl font-bold text-navy-blue mb-6">Project Gallery</h2>
+                  <div className="grid grid-cols-2 gap-4">
+                    {project.images.slice(0, 4).map((image, index) => (
+                      <div key={index} className="relative h-40 rounded-lg overflow-hidden group">
                         <Image
                           src={image || "/placeholder.svg"}
                           alt={`${project.title} - Image ${index + 1}`}
                           fill
-                          className="object-cover rounded-lg group-hover:scale-105 transition-transform"
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
                           onClick={() => {
-                            setSelectedImage(index)
-                            setShowGallery(true)
+                            setSelectedImage(index);
+                            setShowGallery(true);
                           }}
                         />
+                        {index === 3 && project.images.length > 4 && (
+                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                            <span className="text-white text-sm font-medium">+{project.images.length - 4} more</span>
+                          </div>
+                        )}
                       </div>
                     ))}
-                  </div>
-                </div>
-              )}
-
-              {activeTab === "specifications" && (
-                <div>
-                  <h2 className="text-3xl font-bold mb-6 text-navy-blue">Specifications</h2>
-                  <div className="bg-white p-8 rounded-lg shadow-lg">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {Object.entries(project.specifications).map(([key, value]) => (
-                        <div key={key} className="border-b pb-4">
-                          <h4 className="font-semibold text-navy-blue mb-2">{key}</h4>
-                          <p className="text-gray-600">{value}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeTab === "amenities" && (
-                <div>
-                  <h2 className="text-3xl font-bold mb-6 text-navy-blue">Amenities</h2>
-                  <div className="bg-white p-8 rounded-lg shadow-lg">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {project.amenities.map((amenity, index) => (
-                        <div key={index} className="flex items-center space-x-3">
-                          <div className="w-2 h-2 bg-primary-yellow rounded-full"></div>
-                          <span className="text-gray-700">{amenity}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeTab === "location" && (
-                <div>
-                  <h2 className="text-3xl font-bold mb-6 text-navy-blue">Location Advantages</h2>
-                  <div className="bg-white p-8 rounded-lg shadow-lg mb-8">
-                    <div className="space-y-4">
-                      {project.locationAdvantages.map((advantage, index) => (
-                        <div key={index} className="flex items-center space-x-3">
-                          <div className="w-2 h-2 bg-primary-yellow rounded-full"></div>
-                          <span className="text-gray-700">{advantage}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="bg-white p-8 rounded-lg shadow-lg">
-                    <h3 className="text-xl font-bold mb-4 text-navy-blue">Location Map</h3>
-                    <div className="w-full h-64 bg-gray-200 rounded-lg">
-                      <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3804.8!2d78.2644!3d17.5449!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDMyJzQxLjYiTiA3OMKwMTUnNTEuOCJF!5e0!3m2!1sen!2sin!4v1234567890"
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        allowFullScreen
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                      ></iframe>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Sidebar - Interest Form */}
-            <div className="lg:col-span-1">
-              <div className="bg-white p-8 rounded-lg shadow-lg sticky top-32">
-                <h3 className="text-2xl font-bold mb-6 text-navy-blue">Interested in this Project?</h3>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <input
-                      type="text"
-                      name="name"
-                      placeholder="Your Name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow"
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="tel"
-                      name="phone"
-                      placeholder="Phone Number"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow"
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="Email Address"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow"
-                    />
-                  </div>
-                  <div>
-                    <textarea
-                      name="message"
-                      placeholder="Your Message"
-                      rows={4}
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow resize-none"
-                    ></textarea>
-                  </div>
-                  <button type="submit" className="btn-primary w-full py-3">
-                    Send Inquiry
-                  </button>
-                </form>
-
-                <div className="mt-6 pt-6 border-t">
-                  <h4 className="font-semibold mb-3 text-navy-blue">Contact Our Experts</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <Phone className="w-4 h-4 text-primary-yellow" />
-                      <a href="tel:+919866663349" className="text-gray-600 hover:text-primary-yellow">
-                        +91 98666 63349
-                      </a>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Mail className="w-4 h-4 text-primary-yellow" />
-                      <a href="mailto:info@srisanari.com" className="text-gray-600 hover:text-primary-yellow">
-                        info@srisanari.com
-                      </a>
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Specifications Section with Sidebar and Amenities */}
+          <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Main Content Column */}
+            <div className="lg:col-span-8 space-y-8">
+              {/* Specifications Section */}
+              <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                <h2 className="text-2xl font-bold text-navy-blue mb-6">Specifications</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {Object.entries(project.specifications).map(([key, value]) => (
+                    <div key={key} className="border-b border-gray-100 pb-4">
+                      <p className="text-sm text-gray-500">{key}</p>
+                      <p className="font-medium text-gray-800">{value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Amenities Section */}
+              <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                <h2 className="text-2xl font-bold text-navy-blue mb-6">Amenities</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  {project.amenities.map((amenity, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary-yellow"></div>
+                      <span className="text-sm text-gray-700">{amenity}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* Location Section */}
+              <div className="mt-8 bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                <h2 className="text-2xl font-bold text-navy-blue mb-6">Location</h2>
+                <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden bg-gray-100">
+                  {/* Replace with your map component */}
+                  <div className="w-full h-96 flex items-center justify-center bg-gray-200">
+                    <span className="text-gray-500">Map View</span>
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3">Location Advantages</h3>
+                  <ul className="space-y-2">
+                    {project.locationAdvantages.map((advantage, index) => (
+                      <li key={index} className="flex items-start">
+                        <div className="flex-shrink-0 mt-1">
+                          <div className="w-1.5 h-1.5 rounded-full bg-primary-yellow"></div>
+                        </div>
+                        <span className="ml-2 text-gray-600">{advantage}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar - Contact Form */}
+            <div className="lg:col-span-4">
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 sticky top">
+                <h3 className="text-xl font-bold text-navy-blue mb-4">Interested in this project?</h3>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-yellow focus:border-transparent"
+                      placeholder="Your name"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                      Phone
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-yellow focus:border-transparent"
+                      placeholder="Your phone number"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-yellow focus:border-transparent"
+                      placeholder="Your email address"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                      Message
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      rows={4}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-yellow focus:border-transparent"
+                      placeholder="Your message..."
+                    ></textarea>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-primary-yellow text-navy-blue py-3 px-6 rounded-lg font-semibold hover:bg-primary-yellow/90 transition-colors"
+                  >
+                    Send Message
+                  </button>
+                </form>
+                <div className="mt-6 pt-6 border-t border-gray-100">
+                  <h4 className="font-semibold text-navy-blue mb-3">Contact Information</h4>
+                  <div className="space-y-3">
+                    <a href="tel:+919876543210" className="flex items-center text-gray-600 hover:text-primary-yellow transition-colors">
+                      <Phone className="w-5 h-5 mr-2 text-primary-yellow" />
+                      +91 98765 43210
+                    </a>
+                    <a href="mailto:info@srisanari.com" className="flex items-center text-gray-600 hover:text-primary-yellow transition-colors">
+                      <Mail className="w-5 h-5 mr-2 text-primary-yellow" />
+                      info@srisanari.com
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
         </div>
       </section>
 
       {/* Suggested Projects */}
-      <section className="section-padding bg-white">
+      <section className="py-16 bg-white">
         <div className="container">
           <h2 className="text-3xl font-bold mb-8 text-navy-blue text-center">You Might Also Like</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {suggestedProjects.map((suggestedProject) => (
-              <Link key={suggestedProject.id} href={`/projects/${suggestedProject.id}`}>
-                <div className="bg-gray-50 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+            {getSuggestedProjects(params.id).map((project) => (
+              <Link key={project.id} href={`/projects/${project.id}`}>
+                <div className="bg-gray-50 rounded-lg overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
                   <div className="relative h-48">
                     <Image
-                      src={suggestedProject.image || "/placeholder.svg"}
-                      alt={suggestedProject.title}
+                      src={project.images?.[0] || "/placeholder.svg"}
+                      alt={project.title}
                       fill
                       className="object-cover"
                     />
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-lg font-bold mb-2 text-navy-blue">{suggestedProject.title}</h3>
-                    <p className="text-gray-600 mb-2">{suggestedProject.location}</p>
-                    <p className="text-primary-yellow font-bold">{suggestedProject.price}</p>
+                  <div className="p-6 flex-1 flex flex-col">
+                    <h3 className="text-lg font-bold mb-2 text-navy-blue">{project.title}</h3>
+                    <div className="flex items-center text-gray-600 mb-2">
+                      <MapPin className="w-4 h-4 mr-1" />
+                      <span className="text-sm">{project.location}</span>
+                    </div>
+                    <div className="mt-auto">
+                      <p className="text-primary-yellow font-bold">{project.price}</p>
+                      <div className="flex items-center justify-between mt-2">
+                        <span className="text-sm text-gray-500">{project.type}</span>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          project.status === 'Completed' 
+                            ? 'bg-green-100 text-green-800' 
+                            : project.status === 'Ongoing' 
+                              ? 'bg-blue-100 text-blue-800'
+                              : 'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {project.status}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </Link>
@@ -503,7 +465,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
             </div>
 
             <div className="flex justify-center mt-4 space-x-2">
-              {project.images.map((_, index) => (
+              {project.images.map((_: any, index: number) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
@@ -515,5 +477,5 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
         </div>
       )}
     </div>
-  )
+  );
 }

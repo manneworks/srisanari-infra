@@ -14,8 +14,8 @@ export default function HomePage() {
       <InvestmentProperties />
       <TopProperties />
       <LatestProjects />
-      <TrustedPartnerSection />
-      <ContactSection />
+      {/* <TrustedPartnerSection /> */}
+      {/* <ContactSection /> */}
     </>
   )
 }

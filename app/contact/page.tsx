@@ -46,7 +46,7 @@ export default function ContactPage() {
             {/* Contact Form */}
             <div>
               <h2 className="text-3xl font-bold mb-6 text-navy-blue">Send us a Message</h2>
-              <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 transition-all duration-300 hover:shadow-xl">
+              <div className="bg-white p-8 rounded-xl border border-gray-100 transition-all duration-300">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <p className="text-gray-600 mb-6">We'll get back to you within 24 hours</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -136,7 +136,7 @@ export default function ContactPage() {
               <h2 className="text-3xl font-bold mb-6 text-navy-blue">Find Us</h2>
 
               {/* Map */}
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8 border border-gray-100 transition-all duration-300 hover:shadow-xl">
+              <div className="bg-white rounded-xl overflow-hidden mb-8 border border-gray-100 transition-all duration-300">
                 <div className="h-64 lg:h-80">
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3804.8!2d78.2644!3d17.5449!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDMyJzQxLjYiTiA3OMKwMTUnNTEuOCJF!5e0!3m2!1sen!2sin!4v1234567890"
@@ -152,7 +152,7 @@ export default function ContactPage() {
               </div>
 
               {/* Additional Information */}
-              <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 transition-all duration-300 hover:shadow-xl">
+              <div className="bg-white p-8 rounded-xl border border-gray-100 transition-all duration-300">
                 <h3 className="text-2xl font-bold mb-6 text-navy-blue">Why Choose Us?</h3>
                 <ul className="space-y-4">
                   <li className="flex items-start space-x-3 group">
@@ -235,7 +235,7 @@ export default function ContactPage() {
       */}
 
       {/* Contact Information - Moved to bottom */}
-      <section className="section-padding bg-white">
+      {/* <section className="section-padding bg-white">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4 text-navy-blue">Our Contact Information</h2>
@@ -301,7 +301,7 @@ export default function ContactPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   )
 }

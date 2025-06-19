@@ -17,7 +17,7 @@ export default function IntroSection() {
           </div>
 
           {/* Service Icons */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="text-center p-8 bg-gray-50 rounded-2xl">
               <div className="w-20 h-20 bg-yellow-400/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <Home className="w-10 h-10 text-navy-blue" />
@@ -26,13 +26,13 @@ export default function IntroSection() {
               <p className="text-gray-600 leading-relaxed">High-quality residential and commercial properties</p>
             </div>
 
-            <div className="text-center p-8 bg-gray-50 rounded-2xl">
+            {/* <div className="text-center p-8 bg-gray-50 rounded-2xl">
               <div className="w-20 h-20 bg-yellow-400/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <Users className="w-10 h-10 text-navy-blue" />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-3">Expert Team</h3>
               <p className="text-gray-600 leading-relaxed">Professional real estate consultants</p>
-            </div>
+            </div> */}
 
             <div className="text-center p-8 bg-gray-50 rounded-2xl">
               <div className="w-20 h-20 bg-yellow-400/10 rounded-2xl flex items-center justify-center mx-auto mb-6">

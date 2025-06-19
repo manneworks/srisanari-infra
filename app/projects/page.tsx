@@ -4,16 +4,19 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Filter, MapPin, Calendar } from "lucide-react"
+import { projects } from "@/data/projects"
+import { Project } from "@/data/types"
 
 export default function ProjectsPage() {
-  const [activeFilter, setActiveFilter] = useState("all")
+  const [activeFilter, setActiveFilter] = useState("Ongoing")
   const [selectedType, setSelectedType] = useState("all")
   const [showMobileFilters, setShowMobileFilters] = useState(false)
 
   const filters = [
-    { id: "all", label: "All Projects" },
-    { id: "ongoing", label: "Ongoing" },
-    { id: "completed", label: "Completed" },
+    { id: "Ongoing", label: "Ongoing" },
+    { id: "Completed", label: "Completed" },
+    { id: "Upcoming", label: "Upcoming" },
+    { id: "Available", label: "Available" },
   ]
 
   const propertyTypes = [
@@ -22,87 +25,26 @@ export default function ProjectsPage() {
     { id: "commercial", label: "Commercial" },
     { id: "agriculture", label: "Agriculture" },
     { id: "apartments", label: "Apartments" },
-    { id: "houses", label: "Independent Houses" },
+    { id: "villas", label: "Villas" },
   ]
 
-  const projects = [
-    {
-      id: 1,
-      title: "Sri Sanari Green Valley",
-      type: "residential",
-      status: "ongoing",
-      location: "Patancheru, Sangareddy",
-      price: "₹15,000 per sq.yd",
-      area: "150-300 sq.yd",
-      image: "/placeholder.svg?height=300&width=400",
-      features: ["RERA Approved", "Gated Community", "24/7 Security", "Park & Recreation"],
-      completion: "2024",
-    },
-    {
-      id: 2,
-      title: "Shankara Commercial Hub",
-      type: "commercial",
-      status: "completed",
-      location: "Miyapur, Hyderabad",
-      price: "₹25,000 per sq.yd",
-      area: "200-500 sq.yd",
-      image: "/placeholder.svg?height=300&width=400",
-      features: ["Prime Location", "High ROI", "Ready Possession", "IT Corridor"],
-      completion: "2023",
-    },
-    {
-      id: 3,
-      title: "Infra Farm Lands",
-      type: "agriculture",
-      status: "ongoing",
-      location: "Medak District",
-      price: "₹5,000 per sq.yd",
-      area: "1-5 Acres",
-      image: "/placeholder.svg?height=300&width=400",
-      features: ["Water Facility", "Fertile Soil", "Road Connectivity", "Investment Grade"],
-      completion: "2024",
-    },
-    {
-      id: 4,
-      title: "Sanari Heights Apartments",
-      type: "apartments",
-      status: "ongoing",
-      location: "Kondapur, Hyderabad",
-      price: "₹4,500 per sq.ft",
-      area: "1200-2500 sq.ft",
-      image: "/placeholder.svg?height=300&width=400",
-      features: ["2&3 BHK", "Modern Amenities", "Gym & Pool", "Parking"],
-      completion: "2025",
-    },
-    {
-      id: 5,
-      title: "Premium Villas",
-      type: "houses",
-      status: "completed",
-      location: "Gachibowli, Hyderabad",
-      price: "₹1.2 Cr onwards",
-      area: "2400-3600 sq.ft",
-      image: "/placeholder.svg?height=300&width=400",
-      features: ["Independent Villa", "Luxury Finishes", "Private Garden", "Premium Location"],
-      completion: "2023",
-    },
-    {
-      id: 6,
-      title: "Tech City Plots",
-      type: "residential",
-      status: "ongoing",
-      location: "Kokapet, Hyderabad",
-      price: "₹18,000 per sq.yd",
-      area: "120-250 sq.yd",
-      image: "/placeholder.svg?height=300&width=400",
-      features: ["IT Hub Proximity", "Metro Connectivity", "Schools Nearby", "Investment Grade"],
-      completion: "2024",
-    },
-  ]
+  // Map project data to match the card component's expected format
+  const projectCards = projects.map((project: Project) => ({
+    id: project.id,
+    title: project.title,
+    type: project.type.toLowerCase(),
+    status: project.status,
+    location: project.location,
+    price: project.price,
+    area: project.area || '',
+    image: project.images[0] || "/placeholder.svg",
+    features: project.amenities?.slice(0, 4) || [],
+    completion: project.completion,
+  }))
 
-  const filteredProjects = projects.filter((project) => {
-    const statusMatch = activeFilter === "all" || project.status === activeFilter
-    const typeMatch = selectedType === "all" || project.type === selectedType
+  const filteredProjects = projectCards.filter((project) => {
+    const statusMatch = activeFilter === "all" || project.status.toLowerCase() === activeFilter.toLowerCase()
+    const typeMatch = selectedType === "all" || project.type === selectedType.toLowerCase()
     return statusMatch && typeMatch
   })
 
@@ -196,17 +138,23 @@ export default function ProjectsPage() {
             {filteredProjects.map((project) => (
               <div
                 key={project.id}
-                className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col h-full"
+                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
               >
                 <div className="relative h-48">
                   <Image src={project.image || "/placeholder.svg"} alt={project.title} fill className="object-cover" />
                   <div className="absolute top-4 left-4">
                     <span
                       className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        project.status === "completed" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"
+                        project.status === "Completed" 
+                          ? "bg-green-100 text-green-800" 
+                          : project.status === "Ongoing" 
+                            ? "bg-blue-100 text-blue-800"
+                            : project.status === "Upcoming"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-gray-100 text-gray-800"
                       }`}
                     >
-                      {project.status === "completed" ? "Completed" : "Ongoing"}
+                      {project.status}
                     </span>
                   </div>
                   <div className="absolute top-4 right-4">

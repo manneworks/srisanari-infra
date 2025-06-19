@@ -43,18 +43,20 @@ export default function AboutPage() {
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center lg:text-left">About SRI SANARI SHANKARA INFRA</h1>
-              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-                Building dreams, creating communities, and shaping the future of real estate development in Telangana
-                with integrity, innovation, and excellence.
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {stats.map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-2xl md:text-3xl font-bold text-primary-yellow mb-2">{stat.number}</div>
-                    <div className="text-sm text-gray-300">{stat.label}</div>
-                  </div>
-                ))}
+              <div className="lg:max-w-[90%] text-center lg:text-left">
+                <h1 className="text-4xl md:text-5xl font-bold mb-6">About SRI SANARI SHANKARA INFRA</h1>
+                <p className="text-xl text-gray-300 mb-8 leading-relaxed px-4 lg:px-0">
+                  Building dreams, creating communities, and shaping the future of real estate development in Telangana
+                  with integrity, innovation, and excellence.
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {stats.map((stat, index) => (
+                    <div key={index} className="text-center lg:text-left p-3 bg-navy-light/20 rounded-lg">
+                      <div className="text-xl md:text-2xl font-bold text-primary-yellow">{stat.number}</div>
+                      <div className="text-xs text-gray-300">{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="relative h-96 lg:h-full">
@@ -178,7 +180,7 @@ export default function AboutPage() {
       </section>
 
       {/* Leadership Team */}
-      <section className="section-padding bg-white">
+      {/* <section className="section-padding bg-white">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4 text-navy-blue">Our Leadership</h2>
@@ -219,7 +221,7 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   )
 }
