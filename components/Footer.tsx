@@ -108,10 +108,20 @@ export default function Footer() {
         href={`https://wa.me/${contactDetails.phoneNumbers[0]}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-4 sm:right-6 w-12 h-12 sm:w-14 sm:h-14 bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center shadow-lg z-50 transition-all duration-300 hover:scale-110"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-12 h-12 sm:w-14 sm:h-14 bg-white rounded-full flex items-center justify-center shadow-xl z-50 transition-all duration-300 hover:scale-110 group"
         aria-label="Chat on WhatsApp"
       >
-        <MessageCircle className="w-6 h-6 sm:w-7 sm:h-7" />
+        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#25D366] rounded-full flex items-center justify-center group-hover:bg-[#128C7E] transition-colors duration-300">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            fill="white"
+            className="w-5 h-5 sm:w-6 sm:h-6 drop-shadow-sm"
+            preserveAspectRatio="xMidYMid meet"
+          >
+            <path d="M12 2C6.48 2 2 6.48 2 12c0 1.96.66 3.77 1.76 5.22L2 22l4.78-1.76A9.9 9.9 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.33 0-2.62-.32-3.76-.92l-.54-.32-3.92 1.03 1.04-3.82-.24-.38A7.9 7.9 0 014 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.23-5.95c-.15-.04-1.69-.83-1.95-.93-.26-.1-.45-.15-.64.15-.19.3-.72.93-.89 1.12-.16.19-.33.21-.6.07-.3-.15-1.26-.47-2.4-1.49-.89-.8-1.49-1.78-1.67-2.08-.18-.3-.02-.46.13-.61.14-.14.3-.37.45-.56.15-.19.2-.32.3-.53.1-.21.05-.4-.03-.56-.08-.17-.65-1.57-.88-2.15-.23-.58-.47-.5-.65-.51-.16-.01-.35-.01-.54-.01-.19 0-.49.07-.75.36-.26.3-1 1-1 2.39s1.02 2.77 1.16 2.96c.14.19 2 3.06 4.85 4.29.68.3 1.21.48 1.62.62.68.23 1.3.2 1.79.12.57-.1 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.07-.12-.26-.19-.54-.31z"/>
+          </svg>
+        </div>
       </a>
     </footer>
   )

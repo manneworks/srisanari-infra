@@ -6,37 +6,37 @@ export default function TopProperties() {
     {
       title: "Commercial Plots",
       description: "Prime commercial plots in developing areas with high growth potential and excellent connectivity.",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "/images/home-page/Top properties/image1.jpeg",
       link: "/projects?type=commercial",
     },
     {
       title: "Development Plots",
       description: "Ready-to-build residential plots with all amenities and infrastructure in place.",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "/images/home-page/Top properties/image2.jpeg",
       link: "/projects?type=development",
     },
     {
       title: "Residential Plots",
       description: "Premium residential plots in gated communities with modern amenities and security.",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "/images/home-page/Top properties/image3.webp",
       link: "/projects?type=residential",
     },
     {
       title: "Agriculture Lands",
       description: "Fertile agricultural lands perfect for farming and long-term investment opportunities.",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "/images/home-page/Top properties/image4.jpeg",
       link: "/projects?type=agriculture",
     },
     {
       title: "Independent Houses",
       description: "Luxury independent houses with modern architecture and premium finishes.",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "/images/home-page/Top properties/image5.jpg",
       link: "/projects?type=houses",
     },
     {
       title: "Residential Apartments",
       description: "Modern apartments with world-class amenities in prime locations.",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "/images/home-page/Top properties/image6.jpeg",
       link: "/projects?type=apartments",
     },
   ]

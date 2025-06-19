@@ -9,6 +9,9 @@ const config: Config = {
     "*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    fontFamily: {
+      sans: ['var(--font-space-grotesk)', 'sans-serif'],
+    },
     extend: {
       colors: {
         background: "hsl(var(--background))",
