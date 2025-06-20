@@ -17,7 +17,14 @@ export default function Header() {
   ]
 
   return (
-    <header className="bg-navy fixed w-full top-0 z-50 shadow-lg">
+    <header className="bg-white fixed w-full top-0 z-50 shadow-lg">
+      {/* Mobile Menu Overlay */}
+      <div 
+        className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 lg:hidden ${
+          isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+        }`}
+        onClick={() => setIsMenuOpen(false)}
+      />
       <div className="container">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
@@ -35,8 +42,8 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`text-white hover:text-primary-yellow transition-colors ${
-                  pathname === item.href ? "text-primary-yellow" : ""
+                className={`text-gray-900 hover:text-primary-yellow transition-colors ${
+                  pathname === item.href ? "text-primary-yellow font-medium" : ""
                 }`}
               >
                 {item.name}
@@ -53,34 +60,63 @@ export default function Header() {
           </div>
 
           {/* Mobile Menu Button */}
-          <button className="lg:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <button className="lg:hidden text-gray-900" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-gray-700">
-            <nav className="flex flex-col space-y-4">
+        <div 
+          className={`fixed top-0 right-0 h-full w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out lg:hidden ${
+            isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          <div className="h-full overflow-y-auto p-6">
+            <nav className="flex flex-col space-y-6">
+              <button 
+                className="self-end mb-4 text-gray-500 hover:text-gray-700"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <X className="w-6 h-6" />
+              </button>
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-white hover:text-primary-yellow transition-colors ${
-                    pathname === item.href ? "text-primary-yellow" : ""
+                  className={`text-lg text-gray-900 hover:text-primary-yellow transition-colors py-2 ${
+                    pathname === item.href ? "text-primary-yellow font-medium" : ""
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
                 </Link>
               ))}
-              <a href="tel:+919866663349" className="btn-primary inline-flex items-center space-x-2 w-fit">
+              <a 
+                href="tel:+919866663349" 
+                className="btn-primary inline-flex items-center justify-center space-x-2 w-full mt-4"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 <Phone className="w-4 h-4" />
                 <span>+91 98666 63349</span>
               </a>
+              {/* Social Icons */}
+              <div className="flex space-x-4 pt-4 mt-auto justify-center">
+                <a href="#" className="text-gray-600 hover:text-primary-yellow transition-colors">
+                  <Facebook className="w-5 h-5" />
+                </a>
+                <a href="#" className="text-gray-600 hover:text-primary-yellow transition-colors">
+                  <Twitter className="w-5 h-5" />
+                </a>
+                <a href="#" className="text-gray-600 hover:text-primary-yellow transition-colors">
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a href="#" className="text-gray-600 hover:text-primary-yellow transition-colors">
+                  <Youtube className="w-5 h-5" />
+                </a>
+              </div>
             </nav>
           </div>
-        )}
+        </div>
       </div>
     </header>
   )

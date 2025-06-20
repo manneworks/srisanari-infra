@@ -59,12 +59,13 @@ export default function AboutPage() {
                 </div>
               </div>
             </div>
-            <div className="relative h-96 lg:h-full">
+            <div className="relative h-80 md:h-96 rounded-xl overflow-hidden shadow-2xl">
               <Image
-                src="/placeholder.svg?height=500&width=600"
-                alt="About Us"
+                src="/images/aboutus-page/about-hero-image.jpg"
+                alt="SRI SANARI SHANKARA INFRA"
                 fill
-                className="object-cover rounded-lg"
+                className="object-cover"
+                priority
               />
             </div>
           </div>
@@ -138,7 +139,7 @@ export default function AboutPage() {
       <section className="section-padding bg-navy text-white">
         <div className="container">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Why Choose SRI SANARI?</h2>
+            <h2 className="text-3xl font-bold mb-4">Why to Choose Us</h2>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
               Here's what sets us apart from other real estate companies
             </p>
