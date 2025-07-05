@@ -37,13 +37,13 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2">
+          <nav className="hidden lg:flex items-center space-x-12 absolute left-1/2 transform -translate-x-1/2">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`text-gray-900 hover:text-primary-yellow transition-colors ${
-                  pathname === item.href ? "text-primary-yellow font-medium" : ""
+                className={`text-gray-900 hover:text-primary-yellow transition-colors font-[525] text-[15px] px-2 ${
+                  pathname === item.href ? "text-primary-yellow" : ""
                 }`}
               >
                 {item.name}
@@ -83,8 +83,8 @@ export default function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-lg text-gray-900 hover:text-primary-yellow transition-colors py-2 ${
-                    pathname === item.href ? "text-primary-yellow font-medium" : ""
+                  className={`text-lg text-gray-900 hover:text-primary-yellow transition-colors py-3 font-[525] ${
+                    pathname === item.href ? "text-primary-yellow" : ""
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
