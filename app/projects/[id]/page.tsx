@@ -3,12 +3,12 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { MapPin, Calendar, Phone, Mail, X, ChevronLeft, ChevronRight, TrendingUp } from "lucide-react"
+import { MapPin, Calendar, Phone, Mail, X, ChevronLeft, ChevronRight, TrendingUp, ArrowLeft, Share2, Heart, Ruler, Building2, Layers, Home, Users } from "lucide-react"
 import { Project } from "@/data/types"
 import { getProjectById, getSuggestedProjects } from "@/data/projects"
-import { getStatusStyles } from "./utils"
+import { ProjectNotFound } from "@/components/ErrorState"
 
-export default async function ProjectDetailPage({ params }: { params: { id: string } }) {
+export default function ProjectDetailPage({ params }: { params: { id: string } }) {
   const [activeTab, setActiveTab] = useState("overview")
   const [selectedImage, setSelectedImage] = useState(0)
   const [showGallery, setShowGallery] = useState(false)
@@ -22,15 +22,7 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
   const project = getProjectById(params.id)
 
   if (!project) {
-    return (
-      <div className="pt-20 section-padding text-center">
-        <h1 className="text-3xl font-bold text-navy-blue mb-4">Project Not Found</h1>
-        <p className="text-gray-600 mb-8">The project you're looking for doesn't exist.</p>
-        <Link href="/projects" className="btn-primary">
-          Back to Projects
-        </Link>
-      </div>
-    )
+    return <ProjectNotFound />
   }
 
   const nextImage = () => {
@@ -47,6 +39,19 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
       ...prev,
       [name]: value
     }))
+  }
+
+  const getStatusStyles = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'ongoing':
+        return 'bg-yellow-100 text-yellow-800'
+      case 'completed':
+        return 'bg-green-100 text-green-800'
+      case 'upcoming':
+        return 'bg-blue-100 text-blue-800'
+      default:
+        return 'bg-gray-100 text-gray-800'
+    }
   }
 
   const handleSubmit = (e: React.FormEvent) => {

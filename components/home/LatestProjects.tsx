@@ -39,12 +39,9 @@ export default function LatestProjects() {
               Discover our premium properties and investment opportunities
             </p>
           </div>
-          <Link 
-            href="/projects" 
-            className="btn-primary whitespace-nowrap"
-          >
+          <div className="btn-primary whitespace-nowrap cursor-default">
             View All Projects
-          </Link>
+          </div>
         </div>
 
         <div className="flex space-x-6 overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide">
@@ -53,7 +50,7 @@ export default function LatestProjects() {
               key={index} 
               className="flex-none w-[300px] sm:w-[350px] md:w-full md:flex-1 h-[500px] relative rounded-2xl overflow-hidden group"
             >
-              <Link href={project.link} className="block h-full">
+              <div className="h-full">
                 <div className="absolute inset-0">
                   <Image
                     src={project.image}
@@ -67,7 +64,7 @@ export default function LatestProjects() {
                   <h3 className="text-2xl font-bold mb-2 w-full whitespace-nowrap">{project.title}</h3>
                   <p className="text-gray-200 w-full">{project.location}</p>
                 </div>
-              </Link>
+              </div>
             </div>
           ))}
         </div>
