@@ -27,14 +27,17 @@ export default function HeroSection() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, draggable: true, dragFree: false })
   const [prevBtnEnabled, setPrevBtnEnabled] = useState(false)
   const [nextBtnEnabled, setNextBtnEnabled] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState(0)
 
   const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi])
   const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi])
+  const scrollTo = useCallback((index: number) => emblaApi && emblaApi.scrollTo(index), [emblaApi])
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return
     setPrevBtnEnabled(emblaApi.canScrollPrev())
     setNextBtnEnabled(emblaApi.canScrollNext())
+    setSelectedIndex(emblaApi.selectedScrollSnap())
   }, [emblaApi])
 
   useEffect(() => {
@@ -108,11 +111,11 @@ export default function HeroSection() {
         {slides.map((_, index) => (
           <button
             key={index}
-            onClick={() => emblaApi?.scrollTo(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              emblaApi?.selectedScrollSnap() === index 
+            onClick={() => scrollTo(index)}
+            className={`h-2 rounded-full transition-all duration-300 ${
+              selectedIndex === index 
                 ? 'bg-white w-6' 
-                : 'bg-white bg-opacity-50 hover:bg-opacity-75'
+                : 'bg-white bg-opacity-50 w-2 hover:bg-opacity-75 hover:w-3'
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />
