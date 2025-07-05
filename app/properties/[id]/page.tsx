@@ -142,9 +142,8 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
       <div className="bg-gray-100 py-12">
         <div className="container mx-auto px-4 text-center">
           <Link 
-            href="/#top-properties" 
+            href="/" 
             className="text-navy-blue hover:text-primary-yellow transition-colors font-bold font-heading"
-            scroll={false}
           >
             Back to Properties
           </Link>
