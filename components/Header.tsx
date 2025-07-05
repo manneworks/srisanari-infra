@@ -42,7 +42,7 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`text-gray-900 hover:text-primary-yellow transition-colors font-[525] text-[15px] px-2 ${
+                className={`text-gray-900 hover:text-primary-yellow transition-colors font-semibold text-[15px] px-2 ${
                   pathname === item.href ? "text-primary-yellow" : ""
                 }`}
               >
@@ -83,7 +83,7 @@ export default function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-lg text-gray-900 hover:text-primary-yellow transition-colors py-3 font-[525] ${
+                  className={`text-lg text-gray-900 hover:text-primary-yellow transition-colors py-3 font-semibold ${
                     pathname === item.href ? "text-primary-yellow" : ""
                   }`}
                   onClick={() => setIsMenuOpen(false)}
