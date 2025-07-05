@@ -1,3 +1,4 @@
+import React from 'react'
 import { Home, Building, TreePine, LandPlot, TrendingUp } from "lucide-react"
 import Link from "next/link"
 
@@ -31,30 +32,32 @@ export default function TrustedPartnerSection() {
   ]
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-heading tracking-tight">
             Your Trusted Partner In Real Estate
           </h2>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-xl text-gray-600 mb-8 font-sans">
             We Buy And Sell Properties, We Build Your Dream Home
           </p>
-          <div className="w-24 h-1 bg-yellow-400 mx-auto mb-8"></div>
+          <div className="w-24 h-1 bg-primary-yellow mx-auto mb-10"></div>
           
-          <p className="text-gray-700 leading-relaxed mb-8">
-            SRI SANARI SHANKARA INFRA AND MARKETING is a leading real estate company specializing in premium residential plots, 
-            commercial properties, and comprehensive real estate solutions. With years of experience in the industry, we have 
-            established ourselves as a trusted name in property development and sales.
-          </p>
-          <p className="text-gray-700 leading-relaxed mb-8">
-            Our commitment to quality, transparency, and customer satisfaction has made us the preferred choice for thousands of 
-            satisfied customers across Telangana.
-          </p>
+          <div className="space-y-6 mb-10">
+            <p className="text-gray-700 leading-relaxed font-sans">
+              SRI SANARI SHANKARA INFRA AND MARKETING is a leading real estate company specializing in premium residential plots, 
+              commercial properties, and comprehensive real estate solutions. With years of experience in the industry, we have 
+              established ourselves as a trusted name in property development and sales.
+            </p>
+            <p className="text-gray-700 leading-relaxed font-sans">
+              Our commitment to quality, transparency, and customer satisfaction has made us the preferred choice for thousands of 
+              satisfied customers across Telangana.
+            </p>
+          </div>
           
           <Link 
             href="/about" 
-            className="btn-primary"
+            className="btn-primary font-heading tracking-wider"
           >
             Learn More About Us
           </Link>
@@ -65,13 +68,13 @@ export default function TrustedPartnerSection() {
           {services.map((service, index) => (
             <div 
               key={index}
-              className="bg-white p-8 rounded-xl hover:shadow-lg transition-all duration-300 border border-gray-100"
+              className="bg-white p-8 rounded-xl hover:shadow-lg transition-all duration-300 border border-gray-100 group"
             >
-              <div className="w-14 h-14 bg-yellow-50 rounded-xl flex items-center justify-center mb-4">
-                {service.icon}
+              <div className="w-16 h-16 bg-yellow-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-yellow/10 transition-colors">
+                {React.cloneElement(service.icon, { className: 'w-7 h-7 text-primary-yellow group-hover:scale-110 transition-transform' })}
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">{service.title}</h3>
-              <p className="text-gray-600">{service.description}</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 font-heading">{service.title}</h3>
+              <p className="text-gray-600 font-sans">{service.description}</p>
             </div>
           ))}
         </div>

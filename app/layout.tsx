@@ -1,14 +1,24 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Space_Grotesk } from "next/font/google"
+import { Montserrat, Open_Sans } from "next/font/google"
 import "./globals.css"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 
-const spaceGrotesk = Space_Grotesk({ 
+// Configure Montserrat for headings
+const montserrat = Montserrat({ 
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: '--font-montserrat',
+  display: 'swap',
+})
+
+// Configure Open Sans for body text
+const openSans = Open_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-  variable: '--font-space-grotesk'
+  variable: '--font-opensans',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -51,10 +61,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={`${spaceGrotesk.className} font-sans`}>
+    <html lang="en" className={`${montserrat.variable} ${openSans.variable}`}>
+      <body className={`min-h-screen flex flex-col bg-white font-sans`}>
         <Header />
-        <main>{children}</main>
+        <main className="flex-grow">{children}</main>
         <Footer />
       </body>
     </html>

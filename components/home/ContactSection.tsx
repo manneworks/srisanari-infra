@@ -64,8 +64,8 @@ export default function ContactSection() {
           {/* Contact Form */}
           <div className="bg-navy rounded-xl shadow-lg p-8 text-white flex flex-col h-full">
             <div>
-              <h2 className="text-3xl font-bold mb-4">Contact Us Today</h2>
-              <p className="text-gray-300 mb-8">
+              <h2 className="text-3xl font-bold mb-4 font-heading tracking-tight">Contact Us Today</h2>
+              <p className="text-gray-300 mb-8 font-sans">
                 Ready to invest in your dream property? Get in touch with our experts today.
               </p>
             </div>
@@ -73,7 +73,7 @@ export default function ContactSection() {
             <form onSubmit={handleSubmit} className="space-y-6 flex-grow flex flex-col">
               <div className="space-y-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-200 mb-2">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-200 mb-2 font-sans">
                     Your Name
                   </label>
                   <input
@@ -84,11 +84,11 @@ export default function ContactSection() {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent placeholder-gray-400"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent placeholder-gray-400 font-sans"
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2 font-sans">
                     Email Address
                   </label>
                   <input
@@ -99,56 +99,56 @@ export default function ContactSection() {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent placeholder-gray-400"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent placeholder-gray-400 font-sans"
                   />
                 </div>
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-200 mb-2">
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-200 mb-2 font-sans">
                     Your Message
                   </label>
                   <textarea
                     id="message"
                     name="message"
-                    placeholder="Type your message here..."
                     rows={4}
+                    placeholder="How can we help you?"
                     value={formData.message}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent resize-none placeholder-gray-400"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent placeholder-gray-400 font-sans"
                   ></textarea>
                 </div>
               </div>
-              <div className="mt-auto">
-                <button
-                  type="submit"
-                  className="w-full btn-primary py-3 px-6 text-lg"
-                >
-                  Send Message
-                </button>
-              </div>
+              <button
+                type="submit"
+                className="w-full bg-primary-yellow text-navy hover:bg-yellow-500 py-3 px-6 rounded-lg font-semibold transition-colors mt-auto font-heading tracking-wider"
+              >
+                Send Message
+              </button>
             </form>
           </div>
 
           {/* FAQ Section */}
-          <div className="text-white">
-            <h2 className="text-3xl font-bold mb-6 text-primary-yellow">Frequently Asked Questions</h2>
+          <div>
+            <h2 className="text-3xl font-bold mb-8 text-gray-900 font-heading tracking-tight">
+              Frequently Asked Questions
+            </h2>
             <div className="space-y-4">
               {faqs.map((faq, index) => (
-                <div key={index} className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
+                <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
                   <button
-                    className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-700 transition-colors text-white"
+                    className="w-full flex justify-between items-center p-4 text-left bg-white hover:bg-gray-50 transition-colors"
                     onClick={() => setOpenFaq(openFaq === index ? null : index)}
                   >
-                    <span className="font-semibold text-white">{faq.question}</span>
+                    <span className="font-medium text-gray-900 font-heading">{faq.question}</span>
                     {openFaq === index ? (
-                      <ChevronUp className="w-5 h-5 text-primary-yellow" />
+                      <ChevronUp className="w-5 h-5 text-gray-500" />
                     ) : (
-                      <ChevronDown className="w-5 h-5 text-primary-yellow" />
+                      <ChevronDown className="w-5 h-5 text-gray-500" />
                     )}
                   </button>
                   {openFaq === index && (
-                    <div className="px-6 pb-4">
-                      <p className="text-gray-200 leading-relaxed">{faq.answer}</p>
+                    <div className="p-4 bg-gray-50 border-t border-gray-100">
+                      <p className="text-gray-700 font-sans">{faq.answer}</p>
                     </div>
                   )}
                 </div>

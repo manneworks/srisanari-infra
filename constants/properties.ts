@@ -4,12 +4,25 @@ export const topProperties: Property[] = [
   {
     id: 'commercial',
     title: 'Commercial Plots',
-    description: 'Prime commercial plots in developing areas with high growth potential and excellent connectivity.',
+    description: 'Prime commercial plots in developing areas with high growth potential and excellent connectivity. These plots are strategically located in high-traffic zones with excellent visibility and accessibility. Perfect for businesses looking to establish a strong presence in the market.',
     image: '/images/home-page/Top Properties/image1.jpeg',
     link: '/projects?type=commercial',
     alt: 'Commercial plots for sale in prime locations',
     width: 500,
     height: 300,
+    price: 25000000, // 2.5 Cr
+    location: 'Hyderabad, Telangana',
+    bedrooms: 0,
+    bathrooms: 0,
+    area: 5000,
+    features: [
+      'Prime commercial location',
+      'Excellent road connectivity',
+      'Near to major business hubs',
+      'High visibility and accessibility',
+      'Approved layouts',
+      'Clear titles'
+    ]
   },
   {
     id: 'development',
@@ -20,6 +33,7 @@ export const topProperties: Property[] = [
     alt: 'Development plots with infrastructure ready for construction',
     width: 500,
     height: 300,
+    price: 15000000, // 1.5 Cr
   },
   {
     id: 'residential',
@@ -30,6 +44,7 @@ export const topProperties: Property[] = [
     alt: 'Premium residential plots in gated communities',
     width: 500,
     height: 300,
+    price: 12000000, // 1.2 Cr
   },
   {
     id: 'agriculture',
@@ -40,6 +55,7 @@ export const topProperties: Property[] = [
     alt: 'Fertile agricultural lands for sale',
     width: 500,
     height: 300,
+    price: 8000000, // 80 Lakhs
   },
   {
     id: 'houses',
@@ -48,6 +64,7 @@ export const topProperties: Property[] = [
     image: '/images/home-page/Top Properties/image5.jpg',
     link: '/projects?type=houses',
     alt: 'Luxury independent houses with modern design',
+    price: 35000000, // 3.5 Cr
     width: 500,
     height: 300,
   },
@@ -58,6 +75,7 @@ export const topProperties: Property[] = [
     image: '/images/home-page/Top Properties/image6.jpeg',
     link: '/projects?type=apartments',
     alt: 'Modern residential apartments with amenities',
+    price: 5000000, // 50 Lakhs
     width: 500,
     height: 300,
   },

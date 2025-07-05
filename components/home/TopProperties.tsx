@@ -57,10 +57,10 @@ export default function TopProperties() {
     >
       <div className="container">
         <div className="text-center mb-12">
-          <h2 id="top-properties-heading" className="text-3xl font-bold mb-4 text-navy-blue">
+          <h2 id="top-properties-heading" className="text-3xl md:text-4xl font-bold mb-4 text-navy-blue font-heading tracking-tight">
             Top Properties
           </h2>
-          <p className="text-gray-600 text-lg">Explore our best property offerings</p>
+          <p className="text-gray-600 text-lg font-sans">Explore our best property offerings</p>
         </div>
 
         {loading ? (
@@ -97,19 +97,26 @@ export default function TopProperties() {
                 <div className="p-6 flex flex-col h-[calc(100%-12rem)]">
                   <h3 
                     id={`property-${property.id}-title`}
-                    className="text-xl font-bold mb-3 text-navy-blue"
+                    className="text-xl font-bold mb-3 text-navy-blue font-heading"
                   >
                     {property.title}
                   </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed flex-grow">{property.description}</p>
-                  <div className="mt-auto">
-                    <Link
-                      href={property.link}
-                      className="inline-block px-5 py-2.5 bg-navy text-white font-medium rounded-xl hover:bg-opacity-90 transition-all duration-200 hover:shadow-sm active:scale-95"
-                      aria-label={`View details for ${property.title}`}
-                    >
-                      View Properties
-                    </Link>
+                  <p className="text-gray-600 mb-4 line-clamp-2 font-sans">
+                    {property.description}
+                  </p>
+                  <div className="mt-auto pt-4 border-t border-gray-100">
+                    <div className="flex justify-between items-center">
+                      <span className="text-lg font-bold text-navy-blue font-heading">
+                        ₹{property.price.toLocaleString('en-IN')}
+                      </span>
+                      <Link
+                        href={`/properties/${property.id}`}
+                        className="text-yellow-600 font-medium font-sans"
+                        aria-label={`View details for ${property.title}`}
+                      >
+                        View Details
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>

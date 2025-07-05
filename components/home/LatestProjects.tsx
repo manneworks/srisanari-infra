@@ -30,39 +30,47 @@ export default function LatestProjects() {
   ]
 
   return (
-    <section className="py-16 bg-white">
+    <section className="section-padding bg-white">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
           <div className="text-left">
-            <h2 className="text-3xl md:text-4xl font-bold text-navy-blue mb-2">Our Latest Projects</h2>
-            <p className="text-gray-600 text-lg">
+            <h2 className="text-3xl md:text-4xl font-bold text-navy-blue mb-3 font-heading tracking-tight">
+              Our Latest Projects
+            </h2>
+            <p className="text-gray-600 text-lg font-sans">
               Discover our premium properties and investment opportunities
             </p>
           </div>
-          <div className="btn-primary whitespace-nowrap cursor-default">
+          <Link 
+            href="/projects" 
+            className="btn-call font-heading tracking-wider whitespace-nowrap hover:shadow-md transition-shadow duration-300"
+          >
             View All Projects
-          </div>
+          </Link>
         </div>
 
-        <div className="flex space-x-6 overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {projects.map((project, index) => (
             <div 
               key={index} 
-              className="flex-none w-[300px] sm:w-[350px] md:w-full md:flex-1 h-[500px] relative rounded-2xl overflow-hidden group"
+              className="group relative h-[400px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
             >
-              <div className="h-full">
-                <div className="absolute inset-0">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-90"></div>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-6 text-center text-white flex flex-col items-center justify-end min-h-[150px]">
-                  <h3 className="text-2xl font-bold mb-2 w-full whitespace-nowrap">{project.title}</h3>
-                  <p className="text-gray-200 w-full">{project.location}</p>
+              <div className="absolute inset-0">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-center">
+                <div className="bg-gradient-to-t from-black/90 to-transparent pt-16 pb-6 px-4 rounded-b-2xl">
+                  <h3 className="text-xl font-bold mb-1.5 text-white font-heading group-hover:text-primary-yellow transition-colors duration-300">
+                    {project.title}
+                  </h3>
+                  <p className="text-gray-200 text-sm font-sans">{project.location}</p>
                 </div>
               </div>
             </div>

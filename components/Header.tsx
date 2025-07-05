@@ -17,7 +17,7 @@ export default function Header() {
   ]
 
   return (
-    <header className="bg-white fixed w-full top-0 z-50 shadow-lg">
+    <header className="bg-white fixed w-full top-0 z-50 shadow-lg font-heading">
       {/* Mobile Menu Overlay */}
       <div 
         className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 lg:hidden ${
@@ -42,7 +42,7 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`text-gray-900 hover:text-primary-yellow transition-colors font-semibold text-[15px] px-2 ${
+                className={`text-gray-900 hover:text-primary-yellow transition-colors font-semibold text-[15px] px-2 tracking-wide ${
                   pathname === item.href ? "text-primary-yellow" : ""
                 }`}
               >
@@ -53,7 +53,7 @@ export default function Header() {
 
           {/* Phone Number */}
           <div className="hidden lg:flex items-center">
-            <a href="tel:+919866663349" className="btn-primary flex items-center space-x-2">
+            <a href="tel:+919866663349" className="btn-call flex items-center space-x-2 font-heading tracking-wider">
               <Phone className="w-4 h-4" />
               <span>+91 98666 63349</span>
             </a>
@@ -93,7 +93,7 @@ export default function Header() {
               ))}
               <a 
                 href="tel:+919866663349" 
-                className="btn-primary inline-flex items-center justify-center space-x-2 w-full mt-4"
+                className="btn-call inline-flex items-center justify-center space-x-2 w-full mt-4 font-heading tracking-wider"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Phone className="w-4 h-4" />

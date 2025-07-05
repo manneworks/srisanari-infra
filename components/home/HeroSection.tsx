@@ -73,21 +73,21 @@ export default function HeroSection() {
                   backgroundImage: `url(${slide.image})`,
                 }}
               >
-                <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+                <div className="absolute inset-0 bg-black/50"></div>
               </div>
 
               {/* Content */}
-              <div className="relative z-10 h-full flex items-center justify-center text-center text-white px-4">
+              <div className="relative z-10 h-full flex items-center justify-center text-center px-4">
                 <div className="max-w-4xl mx-auto px-4">
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-5 animate-fadeIn">
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 animate-fadeIn text-white drop-shadow-lg font-heading tracking-tight">
                     {slide.title}
                   </h1>
-                  <p className="text-base sm:text-lg md:text-xl mb-5 md:mb-6 max-w-2xl mx-auto animate-fadeIn animation-delay-100">
+                  <p className="text-lg sm:text-xl md:text-2xl mb-6 md:mb-8 max-w-2xl mx-auto animate-fadeIn animation-delay-100 text-gray-100 font-normal leading-relaxed">
                     {slide.description}
                   </p>
                   <Link 
                     href="/projects" 
-                    className="btn-primary text-sm sm:text-base px-5 sm:px-7 py-2.5 sm:py-3 inline-block animate-fadeIn animation-delay-200 hover:bg-opacity-90 transition-all duration-300"
+                    className="btn-call text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4 inline-block animate-fadeIn animation-delay-200 hover:bg-opacity-90 transition-all duration-300 font-heading font-semibold tracking-wider shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                   >
                     Explore Properties
                   </Link>

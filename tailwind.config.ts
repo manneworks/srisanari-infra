@@ -10,7 +10,8 @@ const config: Config = {
   ],
   theme: {
     fontFamily: {
-      sans: ['var(--font-space-grotesk)', 'sans-serif'],
+      sans: ['Open Sans', 'sans-serif'],
+      heading: ['Montserrat', 'sans-serif'],
     },
     extend: {
       colors: {

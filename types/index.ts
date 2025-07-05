@@ -7,6 +7,7 @@ export interface Property {
   alt?: string;
   width: number;
   height: number;
+  price: number;
 }
 
 export interface LoadingState {

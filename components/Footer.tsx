@@ -9,8 +9,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About Company */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-white">Fortune Sudhakara Properties</h3>
-            <p className="text-gray-300 text-sm leading-relaxed">
+            <h3 className="text-xl font-bold text-white font-heading tracking-wide">Fortune Sudhakara Properties</h3>
+            <p className="text-gray-300 text-sm leading-relaxed font-sans">
               We are a leading real estate company specializing in premium plots, residential properties, and commercial
               developments. Your trusted partner for quality investments.
             </p>
@@ -37,14 +37,14 @@ export default function Footer() {
 
           {/* Address */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-white">Address</h3>
-            <div className="space-y-3 text-sm text-gray-300">
+            <h3 className="text-xl font-bold text-white font-heading tracking-wide">Address</h3>
+            <div className="space-y-3 text-sm text-white">
               <div className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p>{contactDetails.address.line1},</p>
-                  <p>{contactDetails.address.line2},</p>
-                  <p>{contactDetails.address.line3}</p>
+                <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0 text-white" />
+                <div className="text-white whitespace-pre-line">
+                  {`${contactDetails.address.line1},
+${contactDetails.address.line2},
+${contactDetails.address.line3}`}
                 </div>
               </div>
               <div className="flex items-center space-x-2">
@@ -65,7 +65,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-white">Quick Links</h3>
+            <h3 className="text-xl font-bold text-white font-heading tracking-wide">Quick Links</h3>
             <ul className="space-y-2 text-sm">
                 {quickLinks.map((link) => (
                   <li key={link.name}>
@@ -79,7 +79,7 @@ export default function Footer() {
 
           {/* Location Map */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-white">Our Location</h3>
+            <h3 className="text-xl font-bold text-white font-heading tracking-wide">Our Location</h3>
             <div className="w-full aspect-video bg-gray-700 rounded-lg overflow-hidden border border-gray-600">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3804.8!2d78.2644!3d17.5449!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDMyJzQxLjYiTiA3OMKwMTUnNTEuOCJF!5e0!3m2!1sen!2sin!4v1234567890"
@@ -95,10 +95,10 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-700 pt-8 mt-10">
-          <p className="text-center text-gray-400 text-xs sm:text-sm">
+          <p className="text-center text-gray-400 text-xs sm:text-sm font-sans">
             &copy; {new Date().getFullYear()} SRI SANARI SHANKARA INFRA AND MARKETING. All rights reserved.
           </p>
-          <p className="text-center text-gray-400 text-xs sm:text-sm mt-2">
+          <p className="text-center text-gray-400 text-xs sm:text-sm mt-2 font-sans">
             TS RERA Reg. No.: {contactDetails.reraNumber}
           </p>
         </div>

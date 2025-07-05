@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,6 +10,68 @@
   --text-dark: #333333;
   --text-light: #666666;
   --bg-light: #f8f9fa;
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body: 'Open Sans', sans-serif;
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply font-sans text-gray-800 bg-white;
+    font-family: var(--font-body);
+    line-height: 1.7;
+    font-size: 1rem;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold uppercase tracking-wide mb-4 font-heading;
+    line-height: 1.2;
+  }
+  
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+  
+  h4 {
+    @apply text-xl md:text-2xl;
+  }
+  
+  p {
+    @apply mb-4 text-gray-700;
+    line-height: 1.7;
+  }
+  
+  a {
+    @apply transition-colors duration-300 hover:text-primary-yellow;
+  }
+  
+  .btn {
+    @apply font-heading font-semibold uppercase tracking-wider text-sm px-6 py-3 rounded transition-all duration-300 inline-flex items-center justify-center;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-yellow text-navy-blue hover:bg-opacity-90 hover:shadow-lg;
+  }
+  
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-center mb-12 relative pb-4;
+  }
+  
+  .section-title:after {
+    @apply absolute bottom-0 left-1/2 w-20 h-1 bg-primary-yellow -translate-x-1/2;
+    content: '';
+  }
 }
 
 * {
@@ -16,25 +80,30 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: "Inter", sans-serif;
-  line-height: 1.6;
-  color: var(--text-dark);
-}
-
 .container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 1.5rem;
 }
 
+/* Responsive container padding */
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+/* Button styles */
 .btn-primary {
   background-color: var(--primary-yellow);
   color: var(--navy-blue);
-  padding: 12px 24px;
-  border: none;
-  border-radius: 5px;
+  padding: 0.75rem 1.5rem;
   font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 0.25rem;
+  border: none;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -42,10 +111,46 @@ body {
 .btn-primary:hover {
   background-color: #e6ac37;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Call button with consistent text color on hover */
+.btn-call {
+  background-color: var(--primary-yellow);
+  color: var(--navy-blue);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-call:hover {
+  background-color: #e6ac37;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: var(--navy-blue) !important;
+}
+
+/* Font classes for direct use */
+.font-heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.025em;
+}
+
+.font-body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+/* Utility classes */
 .section-padding {
-  padding: 80px 0;
+  padding: 5rem 0;
 }
 
 .text-primary {
@@ -60,43 +165,9 @@ body {
   background-color: var(--bg-light);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 1rem;
-}
-
-h1 {
-  font-size: 3rem;
-}
-
-h2 {
-  font-size: 2.5rem;
-}
-
-h3 {
-  font-size: 2rem;
-}
-
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  h1 {
-    font-size: 2rem;
-  }
-
-  h2 {
-    font-size: 1.75rem;
-  }
-
-  h3 {
-    font-size: 1.5rem;
-  }
-
   .section-padding {
-    padding: 60px 0;
+    padding: 3.75rem 0;
   }
 }
