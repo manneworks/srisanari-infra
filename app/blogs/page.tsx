@@ -89,7 +89,7 @@ export default function BlogsPage() {
         </div>
 
         {/* Newsletter Subscription */}
-        <div className="mt-16 mb-16 md:mt-24 md:mb-24 max-w-5xl mx-auto">
+        <div className="mt-16 mb-8 md:mt-16 md:mb-10 lg:mb-12 max-w-5xl mx-auto">
           <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 md:p-10 lg:p-12 border border-gray-100">
             <div className="text-center max-w-3xl mx-auto">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
