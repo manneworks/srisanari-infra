@@ -37,7 +37,7 @@ export default function BlogsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="pt-32 pb-16 md:pt-40 md:pb-24 bg-navy text-white">
+      <section className="pt-28 pb-12 md:pt-40 md:pb-24 bg-navy text-white relative z-10">
         <div className="container px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 font-heading">Our Blog</h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
@@ -47,11 +47,11 @@ export default function BlogsPage() {
       </section>
 
       {/* Blog Posts Grid */}
-      <div className="container mx-auto px-6 lg:px-8 py-16 md:py-20 lg:py-24">
+      <div className="container mx-auto px-6 lg:px-8 py-12 md:py-16 lg:py-24 -mt-6 md:mt-0 relative z-0">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
             {blogPosts.map((post) => (
-              <article key={post.id} className="flex flex-col h-full bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100">
+              <article key={post.id} className="flex flex-col h-full bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 mt-8 md:mt-0">
                 <div className="h-56 lg:h-64 relative flex-shrink-0">
                   <Image
                     src={post.image}
@@ -89,13 +89,13 @@ export default function BlogsPage() {
         </div>
 
         {/* Newsletter Subscription */}
-        <div className="mt-24 max-w-5xl mx-auto">
-          <div className="bg-white rounded-xl shadow-lg p-8 md:p-10 lg:p-12 border border-gray-100">
+        <div className="mt-16 mb-16 md:mt-24 md:mb-24 max-w-5xl mx-auto">
+          <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 md:p-10 lg:p-12 border border-gray-100">
             <div className="text-center max-w-3xl mx-auto">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
                 Subscribe to Our Newsletter
               </h2>
-              <p className="text-gray-600 mb-8 text-lg leading-relaxed">
+              <p className="text-gray-600 mb-6 sm:mb-8 text-base sm:text-lg leading-relaxed">
                 Stay updated with the latest real estate trends, investment tips, and property news.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">

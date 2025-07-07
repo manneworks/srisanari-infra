@@ -202,7 +202,7 @@ export default function ProjectsPage() {
 
                     <Link 
                       href={`/projects/${project.id}`} 
-                      className="btn-primary w-full text-center block mt-4"
+                      className="btn-primary w-full text-center block mt-4 !text-black hover:!text-black"
                     >
                       View Details
                     </Link>

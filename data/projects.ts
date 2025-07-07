@@ -13,7 +13,7 @@ export const projects: Project[] = [
     description:
       "Sri Sanari Green Valley is a premium residential plot development located in the heart of Patancheru. This RERA-approved project offers well-planned plots with modern infrastructure and excellent connectivity to Hyderabad city.",
     images: [
-      "/placeholder.svg?height=400&width=600",
+      "/placeholder.svg?height=400&width=60",
       "/placeholder.svg?height=400&width=600",
       "/placeholder.svg?height=400&width=600",
       "/placeholder.svg?height=400&width=600"
