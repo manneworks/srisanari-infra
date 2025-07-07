@@ -43,8 +43,8 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`text-gray-900 hover:text-primary-yellow transition-colors font-semibold text-[15px] px-2 tracking-wide ${
-                  pathname === item.href ? "text-primary-yellow" : ""
+                className={`text-gray-900 hover:text-yellow-600 transition-colors font-semibold text-[15px] px-2 tracking-wide ${
+                  pathname === item.href ? "text-yellow-600" : ""
                 }`}
               >
                 {item.name}
@@ -84,8 +84,8 @@ export default function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-lg text-gray-900 hover:text-primary-yellow transition-colors py-3 font-semibold ${
-                    pathname === item.href ? "text-primary-yellow" : ""
+                  className={`text-lg text-gray-900 hover:text-yellow-600 transition-colors py-3 font-semibold ${
+                    pathname === item.href ? "text-yellow-600" : ""
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >

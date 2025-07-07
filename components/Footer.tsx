@@ -9,10 +9,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About Company */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-white font-heading tracking-wide">Fortune Sudhakara Properties</h3>
+            <h3 className="text-xl font-bold text-white font-heading tracking-wide">Sri Sanari Infra</h3>
             <p className="text-gray-300 text-sm leading-relaxed font-sans">
-              We are a leading real estate company specializing in premium plots, residential properties, and commercial
-              developments. Your trusted partner for quality investments.
+              A premier real estate development company specializing in innovative residential and commercial properties.
+              Building dreams into reality with trust and excellence.
             </p>
             <div className="flex space-x-4 pt-2">
               {socialLinks.map((social) => {
