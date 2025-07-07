@@ -13,88 +13,18 @@ export default function ContactPage() {
     subject: "",
     message: "",
   })
-  const [errors, setErrors] = useState<{phone?: string}>({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<{type: 'success' | 'error' | null, message: string}>({type: null, message: ''})
 
-  const validatePhone = (phone: string) => {
-    // Only allow numbers, spaces, +, -, (, )
-    const phoneRegex = /^[0-9\s+\-()]*$/
-    if (!phone) return 'Phone number is required'
-    if (!phoneRegex.test(phone)) return 'Only numbers and basic phone characters allowed'
-    if (phone.replace(/\D/g, '').length < 10) return 'Phone number is too short'
-    return ''
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    
-    // Validate phone number
-    const phoneError = validatePhone(formData.phone)
-    if (phoneError) {
-      setErrors({ phone: phoneError })
-      return
-    }
-    
-    // Clear any previous errors
-    setErrors({})
-    setIsSubmitting(true)
-    setSubmitStatus({type: null, message: ''})
-
-    try {
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        setSubmitStatus({
-          type: 'success',
-          message: 'Thank you for your message! We will get back to you soon.'
-        })
-        setFormData({ name: "", phone: "", email: "", subject: "", message: "" })
-      } else {
-        throw new Error(data.error || 'Failed to send message')
-      }
-    } catch (error) {
-      console.error('Error:', error)
-      setSubmitStatus({
-        type: 'error',
-        message: 'Failed to send message. Please try again later.'
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
+    alert("Thank you for your message! We will get back to you soon.")
+    setFormData({ name: "", phone: "", email: "", subject: "", message: "" })
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    
-    // For phone input, only allow numbers and basic phone characters
-    if (name === 'phone') {
-      // Only update if the input is valid or empty
-      const phoneRegex = /^[0-9\s+\-()]*$/
-      if (value === '' || phoneRegex.test(value)) {
-        setFormData({
-          ...formData,
-          [name]: value,
-        })
-      }
-      // Clear error when user starts typing
-      if (errors.phone) {
-        setErrors({...errors, phone: ''})
-      }
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      })
-    }
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
   }
 
   return (
@@ -119,11 +49,6 @@ export default function ContactPage() {
               <div className="bg-white p-8 rounded-xl border border-gray-100 transition-all duration-300">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <p className="text-gray-600 mb-6">We'll get back to you within 24 hours</p>
-                  {submitStatus.message && (
-                    <div className={`p-4 rounded-md ${submitStatus.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                      {submitStatus.message}
-                    </div>
-                  )}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
@@ -133,7 +58,7 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all duration-200"
+                        className="w-full px-4 py-3 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all duration-200"
                         placeholder="Your full name"
                       />
                     </div>
@@ -144,21 +69,10 @@ export default function ContactPage() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        onBlur={(e) => {
-                          const error = validatePhone(e.target.value)
-                          setErrors({...errors, phone: error})
-                        }}
                         required
-                        className={`w-full px-4 py-3 border ${
-                          errors.phone ? 'border-red-500' : 'border-gray-200'
-                        } rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all duration-200`}
-                        placeholder="e.g. 9876543234"
-                        inputMode="tel"
-                        pattern="[0-9+\-()\s]*"
+                        className="w-full px-4 py-3 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all duration-200"
+                        placeholder="Your phone number"
                       />
-                      {errors.phone && (
-                        <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
-                      )}
                     </div>
                   </div>
 
@@ -202,20 +116,16 @@ export default function ContactPage() {
                       onChange={handleInputChange}
                       required
                       rows={5}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent resize-none transition-all duration-200"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent resize-none transition-all duration-200"
                       placeholder="Tell us about your requirements..."
                     ></textarea>
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className={`w-full bg-navy-blue text-white py-3 px-6 rounded-2xl hover:bg-opacity-90 transition-all duration-200 font-semibold font-sans ${
-                      isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
-                    }`}
-                    style={{ fontFamily: 'var(--font-heading, Montserrat, sans-serif)' }}
+                  <button 
+                    type="submit" 
+                    className="w-full py-4 text-lg font-semibold text-white bg-navy-blue hover:bg-opacity-90 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-yellow shadow-md hover:shadow-lg"
                   >
-                    {isSubmitting ? 'Submitting...' : 'Submit'}
+                    Send Message
                   </button>
                 </form>
               </div>
