@@ -13,11 +13,57 @@ export default function ContactPage() {
     subject: "",
     message: "",
   })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error' | null
+    message: string
+  }>({ type: null, message: '' })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    alert("Thank you for your message! We will get back to you soon.")
-    setFormData({ name: "", phone: "", email: "", subject: "", message: "" })
+    
+    // Basic validation
+    if (!formData.name || !formData.email || !formData.message) {
+      setSubmitStatus({
+        type: 'error',
+        message: 'Please fill in all required fields.',
+      })
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitStatus({ type: null, message: '' })
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setSubmitStatus({
+          type: 'success',
+          message: 'Thank you for your message! We will get back to you soon.',
+        })
+        // Reset form on success
+        setFormData({ name: "", phone: "", email: "", subject: "", message: "" })
+      } else {
+        throw new Error(data.error || 'Failed to send message')
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      setSubmitStatus({
+        type: 'error',
+        message: 'Failed to send message. Please try again later.',
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -25,6 +71,15 @@ export default function ContactPage() {
       ...formData,
       [e.target.name]: e.target.value,
     })
+  }
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Only allow numbers and common phone number characters
+    const value = e.target.value.replace(/[^0-9+\-()\s]/g, '');
+    setFormData({
+      ...formData,
+      phone: value,
+    });
   }
 
   return (
@@ -49,6 +104,11 @@ export default function ContactPage() {
               <div className="bg-white p-8 rounded-xl border border-gray-100 transition-all duration-300">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <p className="text-gray-600 mb-6">We'll get back to you within 24 hours</p>
+                  {submitStatus.message && (
+                    <div className={`p-4 rounded-md ${submitStatus.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                      {submitStatus.message}
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
@@ -68,10 +128,14 @@ export default function ContactPage() {
                         type="tel"
                         name="phone"
                         value={formData.phone}
-                        onChange={handleInputChange}
+                        onChange={handlePhoneChange}
                         required
+                        pattern="[0-9+\-()\s]+"
+                        title="Please enter a valid phone number (only numbers, +, -, (, ), and spaces are allowed)"
                         className="w-full px-4 py-3 border border-gray-200 rounded-none focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all duration-200"
                         placeholder="Your phone number"
+                        inputMode="tel"
+                        maxLength={15}
                       />
                     </div>
                   </div>
@@ -123,9 +187,10 @@ export default function ContactPage() {
 
                   <button 
                     type="submit" 
-                    className="w-full py-4 text-lg font-semibold text-white bg-navy-blue hover:bg-opacity-90 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-yellow shadow-md hover:shadow-lg"
+                    disabled={isSubmitting}
+                    className={`w-full py-4 text-lg font-semibold text-white bg-navy-blue hover:bg-opacity-90 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-yellow shadow-md hover:shadow-lg ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
                   >
-                    Send Message
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
                   </button>
                 </form>
               </div>

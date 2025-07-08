@@ -1,16 +1,33 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Filter, MapPin, Calendar } from "lucide-react"
-import { projects } from "@/data/projects"
+import { getProjects } from "@/data/projects"
 import { Project } from "@/data/types"
 
 export default function ProjectsPage() {
   const [activeFilter, setActiveFilter] = useState("Ongoing")
   const [selectedType, setSelectedType] = useState("all")
   const [showMobileFilters, setShowMobileFilters] = useState(false)
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const data = await getProjects()
+        setProjects(data)
+      } catch (error) {
+        console.error('Error fetching projects:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProjects()
+  }, [])
 
   const filters = [
     { id: "Ongoing", label: "Ongoing" },
@@ -19,6 +36,7 @@ export default function ProjectsPage() {
     { id: "Available", label: "Available" },
   ]
 
+  // Define property types with their IDs matching the Contentful projectType slugs
   const propertyTypes = [
     { id: "all", label: "All Types" },
     { id: "residential", label: "Residential Plots" },
@@ -29,23 +47,33 @@ export default function ProjectsPage() {
   ]
 
   // Map project data to match the card component's expected format
-  const projectCards = projects.map((project: Project) => ({
-    id: project.id,
-    title: project.title,
-    type: project.type.toLowerCase(),
-    status: project.status,
-    location: project.location,
-    price: project.price,
-    area: project.area || '',
-    image: project.images[0] || "/placeholder.svg",
-    features: project.amenities?.slice(0, 4) || [],
-    completion: project.completion,
-  }))
+  const projectCards = projects.map((project) => {
+    // Use projectType.slug if available, otherwise fallback to the type field
+    const type = project.projectType?.slug || project.type || 'residential';
+    
+    return {
+      id: project.id || '',
+      title: project.title || 'Untitled Project',
+      type: type.toLowerCase(),
+      status: project.status || 'Ongoing',
+      location: project.location || 'Location not specified',
+      price: project.price || 'Price on request',
+      area: project.area || 'Area not specified',
+      image: project.images?.[0] || "/placeholder.svg",
+      features: project.amenities?.slice(0, 4) || [],
+      completion: project.completion || 'Completion date not specified',
+      amenities: project.amenities || [],
+      description: project.description || '',
+      projectType: project.projectType,
+      projectFilter: project.projectFilter
+    };
+  });
 
+  // Filter projects based on active filters
   const filteredProjects = projectCards.filter((project) => {
-    const statusMatch = activeFilter === "all" || project.status.toLowerCase() === activeFilter.toLowerCase()
-    const typeMatch = selectedType === "all" || project.type === selectedType.toLowerCase()
-    return statusMatch && typeMatch
+    const matchesType = selectedType === "all" || project.type === selectedType.toLowerCase();
+    const matchesStatus = !activeFilter || project.status === activeFilter;
+    return matchesType && matchesStatus;
   })
 
   return (
@@ -134,75 +162,92 @@ export default function ProjectsPage() {
       {/* Projects Grid */}
       <section className="section-padding bg-light">
         <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProjects.map((project) => (
-              <div
-                key={project.id}
-                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
-              >
-                <div className="relative h-48">
-                  <Image src={project.image || "/placeholder.svg"} alt={project.title} fill className="object-cover" />
-                  <div className="absolute top-4 left-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        project.status === "Completed" 
-                          ? "bg-green-100 text-green-800" 
-                          : project.status === "Ongoing" 
-                            ? "bg-blue-100 text-blue-800"
-                            : project.status === "Upcoming"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-gray-100 text-gray-800"
-                      }`}
-                    >
-                      {project.status}
-                    </span>
-                  </div>
-                  <div className="absolute top-4 right-4">
-                    <span className="bg-primary-yellow text-navy-blue px-3 py-1 rounded-full text-sm font-medium">
-                      {project.type.charAt(0).toUpperCase() + project.type.slice(1)}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-6 flex-1 flex flex-col">
-                  <h3 className="text-xl font-bold mb-2 text-navy-blue">{project.title}</h3>
-
-                  <div className="flex items-center text-gray-600 mb-2">
-                    <MapPin className="w-4 h-4 mr-2" />
-                    <span className="text-sm">{project.location}</span>
-                  </div>
-
-                  <div className="flex items-center text-gray-600 mb-4">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    <span className="text-sm">Completion: {project.completion}</span>
-                  </div>
-
-                  <div className="mb-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-xl font-medium text-primary-yellow">{project.price}</span>
-                      <span className="text-gray-600 text-sm">{project.area}</span>
+          {loading ? (
+            <div className="col-span-full text-center py-12">
+              <p className="text-gray-500">Loading projects...</p>
+            </div>
+          ) : filteredProjects.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredProjects.map((project) => (
+                <div key={project.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full">
+                  <div className="relative h-48 sm:h-52 overflow-hidden">
+                    <Image 
+                      src={project.image} 
+                      alt={project.title} 
+                      fill 
+                      className="object-cover transition-transform duration-500 hover:scale-105"
+                      sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent">
+                      <span className="absolute top-3 left-3 bg-black/70 text-white px-2.5 py-0.5 rounded-full text-xs sm:text-sm font-medium">
+                        {project.status}
+                      </span>
+                    </div>
+                    <div className="absolute top-3 right-3">
+                      <span className="bg-primary-yellow text-navy-blue px-2.5 py-0.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap">
+                        {project.projectFilter?.name || project.type.charAt(0).toUpperCase() + project.type.slice(1)}
+                      </span>
                     </div>
                   </div>
 
-                  <div className="mt-auto">
-                    <div className="mb-6">
-                      <div className="flex flex-wrap gap-2">
-                        {project.features.slice(0, 3).map((feature, index) => (
-                          <span key={index} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                            {feature}
+                  <div className="p-4 sm:p-5 md:p-6 flex-1 flex flex-col">
+                    <h3 className="text-lg sm:text-xl font-bold mb-2 text-navy-blue line-clamp-2" title={project.title}>
+                      {project.title}
+                    </h3>
+
+                  <div className="flex items-start text-gray-600 mb-2 space-x-1.5">
+                    <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 mt-0.5 flex-shrink-0" />
+                    <span className="text-xs sm:text-sm line-clamp-2">{project.location}</span>
+                  </div>
+
+                  <div className="flex items-center text-gray-600 mb-3 sm:mb-4 space-x-1.5">
+                    <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+                    <span className="text-xs sm:text-sm">
+                      {typeof project.completion === 'string' && project.completion.includes('Completion:') 
+                        ? project.completion 
+                        : `Completion: ${project.completion || 'N/A'}`}
+                    </span>
+                  </div>
+
+                  <div className="mt-auto pt-2 border-t border-gray-100">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
+                      <span className="text-lg sm:text-xl font-medium text-primary-yellow">
+                        {project.price}
+                      </span>
+                      {project.area && (
+                        <span className="text-gray-600 text-sm bg-gray-50 px-2.5 py-1 rounded-md">
+                          {project.area}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 sm:mt-6">
+                    <div className="mb-4 sm:mb-6">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        {project.features.slice(0, 3).map((feature: string, index: number) => (
+                          <span 
+                            key={index} 
+                            className="bg-gray-50 text-gray-700 px-2 py-0.5 sm:py-1 rounded text-xs border border-gray-100"
+                            title={feature}
+                          >
+                            {feature.length > 15 ? `${feature.substring(0, 15)}...` : feature}
                           </span>
                         ))}
                         {project.features.length > 3 && (
-                          <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                            +{project.features.length - 3} more
+                          <span 
+                            className="bg-gray-50 text-gray-500 px-2 py-0.5 sm:py-1 rounded text-xs border border-gray-100"
+                            title={`${project.features.length - 3} more features`}
+                          >
+                            +{project.features.length - 3}
                           </span>
                         )}
                       </div>
                     </div>
 
                     <Link 
-                      href={`/projects/${project.id}`} 
-                      className="btn-primary w-full text-center block mt-4 !text-black hover:!text-black"
+                      href={`/properties/${project.id}`} 
+                      className="btn-primary w-full text-center block mt-2 sm:mt-3 !text-black hover:!text-black text-sm sm:text-base py-2 sm:py-2.5"
                     >
                       View Details
                     </Link>
@@ -210,10 +255,9 @@ export default function ProjectsPage() {
                 </div>
               </div>
             ))}
-          </div>
-
-          {filteredProjects.length === 0 && (
-            <div className="text-center py-12">
+            </div>
+          ) : (
+            <div className="col-span-full text-center py-12">
               <p className="text-gray-600 text-lg">No projects found matching your criteria.</p>
             </div>
           )}
