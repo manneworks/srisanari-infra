@@ -48,7 +48,7 @@ export default function ContactPage() {
       if (response.ok) {
         setSubmitStatus({
           type: 'success',
-          message: 'Thank you for your message! We will get back to you soon.',
+          message: data.message || 'Thank you for your message! We will get back to you soon.',
         })
         // Reset form on success
         setFormData({ name: "", phone: "", email: "", subject: "", message: "" })
@@ -59,7 +59,7 @@ export default function ContactPage() {
       console.error('Error submitting form:', error)
       setSubmitStatus({
         type: 'error',
-        message: 'Failed to send message. Please try again later.',
+        message: error instanceof Error ? error.message : 'Failed to send message. Please try again later.',
       })
     } finally {
       setIsSubmitting(false)

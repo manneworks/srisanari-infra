@@ -19,5 +19,6 @@ export interface EmailOptions {
 export interface EmailResponse {
   success: boolean;
   messageId?: string;
+  message?: string;
   error?: string;
 }
