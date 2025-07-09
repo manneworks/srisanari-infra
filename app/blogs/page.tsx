@@ -205,13 +205,13 @@ export default function BlogsPage() {
                     </h3>
                     
                     <div className="text-gray-600 text-sm mb-4 line-clamp-3">
-                      {post.blogdescription}
+                      {post.blogdescription || post.excerpt || 'No description available'}
                     </div>
                     
                     <div className="mt-auto pt-4 border-t border-gray-100">
                       <Link 
                         href={`/blogs/${post.slug || post.id}`}
-                        className="inline-flex items-center text-primary-yellow font-medium hover:text-navy-blue transition-colors text-sm sm:text-base"
+                        className="inline-flex items-center font-heading text-gray-900 hover:text-yellow-600 font-semibold text-sm uppercase tracking-wider transition-colors"
                       >
                         Read more
                         <svg 
@@ -219,6 +219,7 @@ export default function BlogsPage() {
                           fill="none" 
                           stroke="currentColor" 
                           viewBox="0 0 24 24"
+                          strokeWidth="2"
                         >
                           <path 
                             strokeLinecap="round" 
@@ -246,7 +247,7 @@ export default function BlogsPage() {
                   placeholder="Enter your email" 
                   className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent"
                 />
-                <button className="bg-primary-yellow text-navy-blue font-semibold px-6 py-3 rounded-lg hover:bg-opacity-90 transition-colors">
+                <button className="btn btn-primary font-heading font-semibold tracking-wider">
                   Subscribe
                 </button>
               </div>

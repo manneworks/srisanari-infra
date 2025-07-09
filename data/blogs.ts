@@ -119,12 +119,25 @@ function mapContentfulEntry(entry: ContentfulEntry): BlogPost | null {
     // Log the raw entry to see all available data
     console.log('Raw entry data:', JSON.stringify(entry, null, 2));
     
-    // Get blogdescription or fallback to first paragraph of fullBlogContent
-    let blogdescription = getLocalizedField(fields.blogdescription, '');
+    // Get blog description - handle both direct string and rich text content
+    let blogdescription = '';
     
-    // If no blogdescription, try to extract from fullBlogContent
-    if (!blogdescription && fields.fullBlogContent?.content?.[0]?.content?.[0]?.value) {
-      blogdescription = fields.fullBlogContent.content[0].content[0].value;
+    // First, try to get from blogdescription field
+    if (fields.blogdescription) {
+      blogdescription = getLocalizedField(fields.blogdescription, '');
+    } 
+    // If still empty, try to extract from fullBlogContent
+    if (!blogdescription && fields.fullBlogContent) {
+      try {
+        const content = fields.fullBlogContent['en-US'] || fields.fullBlogContent;
+        if (content?.content?.[0]?.content?.[0]?.value) {
+          blogdescription = content.content[0].content[0].value;
+        } else if (content?.content?.[0]?.value) {
+          blogdescription = content.content[0].value;
+        }
+      } catch (e) {
+        console.error('Error extracting description from fullBlogContent:', e);
+      }
     }
     
     console.log('Blog post data:', {
