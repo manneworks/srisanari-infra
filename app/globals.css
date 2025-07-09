@@ -148,6 +148,17 @@
   line-height: 1.7;
 }
 
+/* Section padding utilities */
+.section-padding {
+  padding: 4rem 0;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding: 6rem 0;
+  }
+}
+
 /* Utility classes */
 .section-padding {
   padding: 5rem 0;
