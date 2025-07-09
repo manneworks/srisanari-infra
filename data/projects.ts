@@ -237,6 +237,11 @@ function mapContentfulEntry(entry: ContentfulEntry): Project {
 export async function getProjectById(id: string): Promise<Project | undefined> {
   if (!id) return undefined;
   
+  if (!contentfulClient) {
+    console.warn('Contentful client is not initialized. Please check your environment variables.');
+    return undefined;
+  }
+  
   try {
     // Use type assertion to handle Contentful client response
     const response = await (contentfulClient as any).getEntries({
@@ -273,8 +278,19 @@ export async function getSuggestedProjects(
     return [];
   }
 
+  if (!contentfulClient) {
+    console.warn('Contentful client is not initialized. Please check your environment variables.');
+    return [];
+  }
+
   try {
     const allProjects = await getProjects();
+    
+    // If no projects were found, return empty array
+    if (!allProjects.length) {
+      console.warn('No projects found to suggest');
+      return [];
+    }
     
     // Filter out the current project and any invalid projects
     const validProjects = allProjects.filter(
@@ -284,16 +300,27 @@ export async function getSuggestedProjects(
         project.id !== undefined
     );
 
+    // If no valid projects after filtering, return empty array
+    if (!validProjects.length) {
+      console.warn('No valid projects found to suggest');
+      return [];
+    }
+
     // Shuffle and limit the results
     const shuffled = [...validProjects].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, Math.min(limit, shuffled.length));
+    return shuffled.slice(0, limit);
   } catch (error) {
-    console.error('Error getting suggested projects:', error);
+    console.error('Error fetching suggested projects:', error);
     return [];
   }
 }
 
 export async function getProjects(): Promise<Project[]> {
+  if (!contentfulClient) {
+    console.warn('Contentful client is not initialized. Please check your environment variables.');
+    return [];
+  }
+
   try {
     // Use type assertion to handle Contentful client response
     const response = await (contentfulClient as any).getEntries({

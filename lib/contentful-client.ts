@@ -1,19 +1,18 @@
-import { createClient } from 'contentful';
+import { createClient, ContentfulClientApi } from 'contentful';
 
 const space = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID;
 const accessToken = process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN;
 
-if (!space) {
-  throw new Error('NEXT_PUBLIC_CONTENTFUL_SPACE_ID is not defined');
+let contentfulClient: ContentfulClientApi<undefined> | null = null;
+
+if (space && accessToken) {
+  contentfulClient = createClient({
+    space,
+    accessToken,
+    environment: process.env.NEXT_PUBLIC_CONTENTFUL_ENVIRONMENT || 'master',
+  });
+} else {
+  console.warn('Contentful environment variables are not set. Contentful functionality will be disabled.');
 }
 
-if (!accessToken) {
-  throw new Error('NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN is not defined');
-}
-
-// Create and export the Contentful client
-export const contentfulClient = createClient({
-  space,
-  accessToken,
-  environment: process.env.NEXT_PUBLIC_CONTENTFUL_ENVIRONMENT || 'master',
-});
+export { contentfulClient };
