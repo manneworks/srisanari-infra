@@ -160,7 +160,7 @@ export default function AboutPage() {
               <div className="w-16 h-16 bg-primary-yellow rounded-full flex items-center justify-center mx-auto mb-6">
                 <TrendingUp className="w-8 h-8 text-navy-blue" />
               </div>
-              <h3 className="text-xl font-bold mb-4">High ROI</h3>
+              <h3 className="text-xl font-bold mb-4">High RETURNS</h3>
               <p className="text-gray-300">
                 Our strategic location selection ensures high appreciation and excellent return on investment for our
                 customers.

@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { MapPin, Calendar, Phone, Mail, X, ChevronLeft, ChevronRight, TrendingUp, ArrowLeft, Share2, Heart, Ruler, Building2, Layers, Home, Users } from "lucide-react"
+import { MapPin, Calendar, Phone, Mail, X, ChevronLeft, ChevronRight, TrendingUp, ArrowLeft, Share2, Heart, Ruler, Building2, Layers, Home, Users, Loader2 } from "lucide-react"
 import { Project } from "@/data/types"
 import { getProjectById, getSuggestedProjects } from "@/data/projects"
 import { ProjectNotFound } from "@/components/ErrorState"
@@ -12,6 +12,9 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
   const [activeTab, setActiveTab] = useState("overview")
   const [selectedImage, setSelectedImage] = useState(0)
   const [showGallery, setShowGallery] = useState(false)
+  const [project, setProject] = useState<Project | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -19,18 +22,48 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
     message: "",
   })
 
-  const project = getProjectById(params.id)
+  useEffect(() => {
+    const fetchProject = async () => {
+      try {
+        setLoading(true)
+        const data = await getProjectById(params.id)
+        if (!data) {
+          setError('Project not found')
+        } else {
+          setProject(data)
+        }
+      } catch (err) {
+        console.error('Error fetching project:', err)
+        setError('Failed to load project. Please try again.')
+      } finally {
+        setLoading(false)
+      }
+    }
 
-  if (!project) {
+    fetchProject()
+  }, [params.id])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary-yellow" />
+          <p>Loading project details...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !project) {
     return <ProjectNotFound />
   }
 
   const nextImage = () => {
-    setSelectedImage((prev) => (prev === project.images.length - 1 ? 0 : prev + 1))
+    setSelectedImage((prev) => (prev === (project?.images?.length || 1) - 1 ? 0 : prev + 1))
   }
 
   const prevImage = () => {
-    setSelectedImage((prev) => (prev === 0 ? project.images.length - 1 : prev - 1))
+    setSelectedImage((prev) => (prev === 0 ? (project?.images?.length || 1) - 1 : prev - 1))
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

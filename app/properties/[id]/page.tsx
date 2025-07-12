@@ -1,21 +1,83 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FaMapMarkerAlt, FaCalendarAlt, FaRulerCombined, FaMoneyBillWave, FaArrowLeft } from 'react-icons/fa';
 import { getProjectById } from '@/data/projects';
 import { ProjectStatus } from '@/data/types';
+import React, { useState, useEffect } from 'react';
+import { submitPropertyInquiry } from '@/app/actions/propertyInquiry';
+import { Loader2 } from 'lucide-react';
 
-export default async function PropertyDetailPage({ params }: { params: { id: string } }) {
-  const project = await getProjectById(params.id);
+interface PropertyDetailPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function PropertyDetailPage({ params }: PropertyDetailPageProps) {
+  const unwrappedParams = React.use(params);
+  const [formState, setFormState] = useState({
+    isSubmitting: false,
+    isSuccess: false,
+    isSubmitted: false,
+    message: ''
+  });
+  
+  const [project, setProject] = useState<Awaited<ReturnType<typeof getProjectById>> | null>(null);
+  
+  useEffect(() => {
+    const loadProject = async () => {
+      try {
+        const data = await getProjectById(unwrappedParams.id);
+        if (!data) {
+          notFound();
+        }
+        setProject(data);
+      } catch (error) {
+        console.error('Error loading project:', error);
+        notFound();
+      }
+    };
+    
+    loadProject();
+  }, [unwrappedParams.id]);
   
   if (!project) {
-    notFound();
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
   
-  // Format price with INR symbol if it's a number, otherwise use as is
-  const formattedPrice = project.price && typeof project.price === 'string' && !isNaN(Number(project.price.replace(/[^0-9]/g, '')))
+  // Format price with Indian Rupee symbol and proper formatting
+  const formattedPrice = project.price && !isNaN(Number(project.price.replace(/[^0-9]/g, '')))
     ? `₹${Number(project.price.replace(/[^0-9]/g, '')).toLocaleString('en-IN')}`
     : project.price || 'Price on request';
+
+  const handleSubmit = async (formData: FormData) => {
+    setFormState(prev => ({ ...prev, isSubmitting: true, isSuccess: false, message: '' }));
+    try {
+      formData.append('propertyId', project.id || '');
+      formData.append('propertySlug', unwrappedParams.id);
+      formData.append('propertyTitle', project.title || '');
+      const result = await submitPropertyInquiry(formData);
+      setFormState({
+        isSubmitting: false,
+        isSuccess: result.success,
+        isSubmitted: result.success,
+        message: result.message || ''
+      });
+      if (result.success) {
+        const form = document.getElementById('property-inquiry-form') as HTMLFormElement;
+        form?.reset();
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setFormState({
+        isSubmitting: false,
+        isSuccess: false,
+        isSubmitted: false,
+        message: 'An error occurred. Please try again.'
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -158,49 +220,81 @@ export default async function PropertyDetailPage({ params }: { params: { id: str
                 <p className="text-gray-200 mt-1 text-sm">Fill out the form and our team will get back to you shortly</p>
               </div>
               
-              <form className="p-6 space-y-5">
+              <form action={handleSubmit} id="property-inquiry-form" className="p-6 space-y-5">
+                {formState.message && (
+                  <div className={`p-3 rounded-md ${formState.isSuccess ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}`}>
+                    {formState.message}
+                  </div>
+                )}
                 <div className="space-y-1">
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">Your Name</label>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">Your Name <span className="text-red-500">*</span></label>
                   <input
                     id="name"
+                    name="name"
                     type="text"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all"
                     required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Your Email</label>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address <span className="text-red-500">*</span></label>
                   <input
                     id="email"
+                    name="email"
                     type="email"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all"
                     required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all"
                   />
                 </div>
                 <div className="space-y-1">
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
                   <input
                     id="phone"
+                    name="phone"
                     type="tel"
+                    pattern="[0-9]{10,15}"
+                    title="Please enter a valid phone number (10-15 digits)"
+                    inputMode="numeric"
+                    onKeyPress={(e) => {
+                      if (!/[0-9]/.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all"
                     required
                   />
                 </div>
                 <div className="space-y-1">
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700">Your Message</label>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700">Your Message <span className="text-red-500">*</span></label>
                   <textarea
                     id="message"
+                    name="message"
                     rows={4}
+                    required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all"
                     placeholder="I'm interested in this property..."
-                    required
                   ></textarea>
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-primary-yellow hover:bg-opacity-90 text-navy-blue font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
+                  disabled={formState.isSubmitting || formState.isSubmitted}
+                  className={`w-full btn btn-primary text-lg flex items-center justify-center ${(formState.isSubmitting || formState.isSubmitted) ? 'opacity-75 cursor-not-allowed' : ''}`}
                 >
-                  Send Message
+                  {formState.isSubmitting ? (
+                    <>
+                      <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                      Submitting...
+                    </>
+                  ) : formState.isSubmitted ? (
+                    <>
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Submitted
+                    </>
+                  ) : (
+                    'Submit'
+                  )}
                 </button>
               </form>
             </div>

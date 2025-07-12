@@ -27,9 +27,5 @@ export interface Project {
     name: string;
     slug: string;
   };
-  projectFilter?: {
-    id: string;
-    name: string;
-    slug: string;
-  };
+  filtertype?: string;
 }

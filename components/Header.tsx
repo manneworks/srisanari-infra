@@ -28,13 +28,18 @@ export default function Header() {
       />
       <div className="container">
         <div className="flex items-center justify-between py-4">
-          {/* Logo */}
+          {/* Logo and Brand Name */}
           <Link href="/" className="flex items-center flex-shrink-0">
-            <img 
-              src="/images/navbar-logo.png" 
-              alt="SRI SANARI Logo" 
-              className="h-14 w-auto object-contain"
-            />
+            <div className="flex items-center space-x-3">
+              <img 
+                src="/images/navbar-logo.png" 
+                alt="SRI SANARI Logo" 
+                className="h-14 w-auto object-contain"
+              />
+              <span className="text-xl font-bold text-gray-900 font-heading tracking-wide">
+                SRI SANARI
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

@@ -1,6 +1,7 @@
 import { contentfulClient } from '@/lib/contentful-client';
 import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
-import type { Entry, EntryFields } from 'contentful';
+import { ContentfulClientApi, Entry } from 'contentful';
+import { Document } from '@contentful/rich-text-types';
 
 // Type for the raw Contentful entry fields
 interface ContentfulFields {
@@ -31,23 +32,7 @@ interface ContentfulEntry {
   fields: ContentfulFields;
 }
 
-export interface BlogPost {
-  id: string;
-  title: string;
-  blogdescription: string;
-  excerpt: string;
-  image: string;
-  date: string;
-  readTime: string;
-  category: string;
-  slug: string;
-  authorName?: string;
-  fullContent?: string;
-  tags?: string[];
-  socialMediaLinks?: Record<string, string>;
-  recentArticles?: string[];
-  categories?: string[];
-}
+
 
 // Helper function to get a field with fallback
 function getField<T>(
@@ -84,7 +69,6 @@ function extractPlainText(richText: any): string {
     if (typeof richText === 'string') return richText;
     return documentToPlainTextString(richText);
   } catch (error) {
-    console.error('Error extracting plain text:', error);
     return '';
   }
 }
@@ -99,7 +83,6 @@ function formatDate(dateString: string): string {
       day: 'numeric',
     });
   } catch (error) {
-    console.error('Error formatting date:', error);
     return new Date().toLocaleDateString('en-US');
   }
 }
@@ -112,12 +95,10 @@ function mapContentfulEntry(entry: ContentfulEntry): BlogPost | null {
     // Get title first to ensure we have at least a title
     const title = getLocalizedField(fields.title, 'Untitled Blog Post');
     if (!title) {
-      console.warn('Blog post has no title, skipping:', entry.sys?.id);
       return null;
     }
 
-    // Log the raw entry to see all available data
-    console.log('Raw entry data:', JSON.stringify(entry, null, 2));
+
     
     // Get blog description - handle both direct string and rich text content
     let blogdescription = '';
@@ -136,21 +117,11 @@ function mapContentfulEntry(entry: ContentfulEntry): BlogPost | null {
           blogdescription = content.content[0].value;
         }
       } catch (e) {
-        console.error('Error extracting description from fullBlogContent:', e);
+    
       }
     }
     
-    console.log('Blog post data:', {
-      id: entry.sys.id,
-      title,
-      blogdescription,
-      hasDescription: !!blogdescription,
-      availableFields: Object.keys(fields),
-      fieldValues: Object.entries(fields).reduce((acc, [key, value]) => {
-        acc[key] = value ? 'Exists' : 'Empty';
-        return acc;
-      }, {} as Record<string, string>)
-    });
+
     
     // Create excerpt from description (first 150 chars)
     const excerpt = blogdescription.length > 150 
@@ -186,11 +157,9 @@ function mapContentfulEntry(entry: ContentfulEntry): BlogPost | null {
     );
 
     // Get full blog content (rich text)
-    const fullContent = getField<any>(
-      fields,
-      ['fullBlogContent'],
-      ''
-    );
+    const fullContent = fields.fullBlogContent;
+    
+
 
     // Get tags (array of strings)
     const tags = Array.isArray(fields.tags) 
@@ -204,10 +173,18 @@ function mapContentfulEntry(entry: ContentfulEntry): BlogPost | null {
       {}
     );
 
-    // Get recent articles (array of entry IDs)
-    const recentArticles = Array.isArray(fields.recentArticles)
-      ? fields.recentArticles.map((ref: any) => ref?.sys?.id || '').filter(Boolean)
-      : [];
+    // Get recent articles (single linked entry)
+    const recentArticles = fields.recentArticles 
+      ? [{
+          sys: { id: fields.recentArticles.sys.id },
+          fields: {
+            title: fields.recentArticles.fields.title,
+            slug: fields.recentArticles.fields.slug,
+            coverImage: fields.recentArticles.fields.coverImage,
+            publishDate: fields.recentArticles.fields.publishDate
+          }
+        }]
+      : []; 
 
     // Get categories (array of category IDs)
     const categories = Array.isArray(fields.categories)
@@ -243,12 +220,12 @@ function mapContentfulEntry(entry: ContentfulEntry): BlogPost | null {
       category,
       slug,
       authorName: authorName || undefined,
-      fullContent: fullContent || undefined,
+      fullContent: fullContent,
       tags: tags.length ? tags : undefined,
-      socialMediaLinks: Object.keys(socialMediaLinks).length ? socialMediaLinks : undefined,
       recentArticles: recentArticles.length ? recentArticles : undefined,
       categories: categories.length ? categories : undefined,
-    };
+      publishDate: dateField
+    } as BlogPost;
   } catch (error) {
     console.error('Error mapping blog post:', error);
     console.error('Problematic entry ID:', entry.sys?.id);
@@ -344,6 +321,46 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
   }
 }
 
+export interface BlogPost {
+  id: string;
+  title: string;
+  blogdescription: string;
+  excerpt: string;
+  image: string;
+  date: string;
+  readTime: string;
+  category: string;
+  slug: string;
+  authorName?: string;
+  fullContent?: any; // Rich text content from Contentful - handled in component
+  tags?: string[];
+  recentArticles?: {
+    sys: { id: string };
+    fields: {
+      title: string;
+      slug: string;
+      coverImage?: {
+        fields: {
+          file: {
+            url: string;
+          };
+        };
+      };
+      publishDate: string;
+      blogDescription?: string;
+    };
+  }[];
+  categories?: string[];
+  publishDate: string;
+  coverImage?: {
+    fields: {
+      file: {
+        url: string;
+      };
+    };
+  };
+}
+
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
   if (!contentfulClient) {
     console.warn('Contentful client is not configured');
@@ -351,13 +368,17 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
   }
 
   try {
+    const contentType = 'blogs-2'; // The actual content type ID from Contentful
+    console.log(`Fetching blog post with slug ${slug} using content type: ${contentType}`);
+
     const entries = await contentfulClient.getEntries({
-      content_type: 'blogPost',
+      content_type: contentType,
       'fields.slug': slug,
       limit: 1
     });
 
     if (entries.items.length === 0) {
+      console.log(`No blog post found with slug: ${slug}`);
       return null;
     }
 

@@ -3,22 +3,44 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { topProperties } from '@/constants/properties';
-import { Property } from '@/types';
+import { getProjects } from '@/data/projects';
+import { Project } from '@/data/types';
 import { PropertyCardSkeleton } from './PropertyCardSkeleton';
 
 export default function TopProperties() {
   const [loading, setLoading] = useState(true);
-  const [properties, setProperties] = useState<Property[]>([]);
+  const [properties, setProperties] = useState<Project[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Simulate API call
     const fetchProperties = async () => {
       try {
         setLoading(true);
-        // In a real app, this would be an API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        const projects = await getProjects();
+        
+        // Get one project for each property type
+        const propertyTypes = [
+          'Commercial',
+          'Residential',
+          'Apartments',
+          'Agriculture Land',
+          'Development Lands',
+          'Villas'
+        ];
+        
+        // Create a map of projects by their filtertype
+        const projectsByType = new Map<string, Project>();
+        projects.forEach(project => {
+          if (project.filtertype) {
+            projectsByType.set(project.filtertype, project);
+          }
+        });
+
+        // Get the top properties by type
+        const topProperties = propertyTypes
+          .map(type => projectsByType.get(type))
+          .filter((project): project is Project => project !== undefined);
+
         setProperties(topProperties);
       } catch (err) {
         setError('Failed to load properties. Please try again later.');
@@ -60,7 +82,7 @@ export default function TopProperties() {
           <h2 id="top-properties-heading" className="text-3xl md:text-4xl font-bold mb-4 text-navy-blue font-heading tracking-tight">
             Top Properties
           </h2>
-          <p className="text-gray-600 text-lg font-sans">Explore our best property offerings</p>
+          {/* <p className="text-gray-600 text-lg font-sans">Explore our best property offerings</p> */}
         </div>
 
         {loading ? (
@@ -70,49 +92,46 @@ export default function TopProperties() {
             ))}
           </div>
         ) : (
-          <div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            role="list"
-            aria-label="List of top properties"
-          >
-            {properties.map((property) => (
-              <div
-                key={property.id}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {properties.map((project) => (
+              <div 
+                key={project.id}
                 className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100"
                 role="listitem"
-                aria-labelledby={`property-${property.id}-title`}
+                aria-labelledby={`property-${project.id}-title`}
               >
-                <div className="relative h-48 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/10 z-10"></div>
-                  <Image
-                    src={property.image}
-                    alt={property.alt || property.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    priority={false}
-                    loading="lazy"
-                  />
-                </div>
-                <div className="p-6 flex flex-col h-[calc(100%-12rem)]">
-                  <h3 
-                    id={`property-${property.id}-title`}
-                    className="text-xl font-bold mb-3 text-navy-blue font-heading"
-                  >
-                    {property.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-2 font-sans">
-                    {property.description}
-                  </p>
-                  <div className="mt-auto pt-4 border-t border-gray-100">
-                    <div className="flex justify-between items-center">
-                      <span className="text-lg font-bold text-navy-blue font-heading">
-                        ₹{property.price.toLocaleString('en-IN')}
-                      </span>
+                <Link href={`/properties/${project.id}`} className="block">
+                  <div className="relative h-48 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/10 z-10"></div>
+                    <Image
+                      src={project.images?.[0] || '/placeholder.svg'}
+                      alt={project.title || 'Project Image'}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority={false}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-6 flex flex-col h-[calc(100%-12rem)]">
+                    <h3 
+                      id={`property-${project.id}-title`}
+                      className="text-xl font-bold mb-3 text-navy-blue font-heading hover:text-blue-700 transition-colors"
+                    >
+                      {project.title}
+                    </h3>
+                    <p className="text-gray-600 mb-4 line-clamp-2 font-sans">
+                      {project.description || 'No description available'}
+                    </p>
+                  </div>
+                </Link>
+                <div className="p-6 pt-0">
+                  <div className="pt-4 border-t border-gray-100">
+                    <div className="text-center">
                       <Link
-                        href={`/properties/${property.id}`}
-                        className="text-yellow-600 font-medium font-sans"
-                        aria-label={`View details for ${property.title}`}
+                        href={`/properties/${project.id}`}
+                        className="text-yellow-600 hover:text-yellow-700 font-medium font-sans transition-colors"
+                        aria-label={`View details for ${project.title}`}
                       >
                         View Details
                       </Link>
@@ -125,5 +144,5 @@ export default function TopProperties() {
         )}
       </div>
     </section>
-  )
+  );
 }

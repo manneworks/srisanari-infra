@@ -8,6 +8,11 @@ export interface Property {
   width: number;
   height: number;
   price: number;
+  location?: string;
+  bedrooms?: number;
+  bathrooms?: number;
+  area?: number;
+  features?: string[];
 }
 
 export interface LoadingState {

@@ -8,8 +8,8 @@ import { getProjects } from "@/data/projects"
 import { Project } from "@/data/types"
 
 export default function ProjectsPage() {
-  const [activeFilter, setActiveFilter] = useState("Ongoing")
-  const [selectedType, setSelectedType] = useState("all")
+  const [activeFilter, setActiveFilter] = useState("all")
+
   const [showMobileFilters, setShowMobileFilters] = useState(false)
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
@@ -30,31 +30,21 @@ export default function ProjectsPage() {
   }, [])
 
   const filters = [
-    { id: "Ongoing", label: "Ongoing" },
-    { id: "Completed", label: "Completed" },
-    { id: "Upcoming", label: "Upcoming" },
-    { id: "Available", label: "Available" },
+    { id: "all", label: "All Projects" },
+    { id: "Commercial", label: "Commercial" },
+    { id: "Residential", label: "Residential" },
+    { id: "Apartments", label: "Apartments" },
+    { id: "Agriculture Land", label: "Agriculture Land" },
+    { id: "Development Lands", label: "Development Lands" },
+    { id: "Villas", label: "Villas" },
   ]
 
   // Define property types with their IDs matching the Contentful projectType slugs
-  const propertyTypes = [
-    { id: "all", label: "All Types" },
-    { id: "residential", label: "Residential Plots" },
-    { id: "commercial", label: "Commercial" },
-    { id: "agriculture", label: "Agriculture" },
-    { id: "apartments", label: "Apartments" },
-    { id: "villas", label: "Villas" },
-  ]
-
   // Map project data to match the card component's expected format
   const projectCards = projects.map((project) => {
-    // Use projectType.slug if available, otherwise fallback to the type field
-    const type = project.projectType?.slug || project.type || 'residential';
-    
     return {
       id: project.id || '',
       title: project.title || 'Untitled Project',
-      type: type.toLowerCase(),
       status: project.status || 'Ongoing',
       location: project.location || 'Location not specified',
       price: project.price || 'Price on request',
@@ -64,16 +54,18 @@ export default function ProjectsPage() {
       completion: project.completion || 'Completion date not specified',
       amenities: project.amenities || [],
       description: project.description || '',
-      projectType: project.projectType,
-      projectFilter: project.projectFilter
+      projectType: project.type,
+      filtertype: project.filtertype
     };
   });
 
   // Filter projects based on active filters
   const filteredProjects = projectCards.filter((project) => {
-    const matchesType = selectedType === "all" || project.type === selectedType.toLowerCase();
-    const matchesStatus = !activeFilter || project.status === activeFilter;
-    return matchesType && matchesStatus;
+    if (!project.filtertype) return false;
+    if (activeFilter === 'all') return true;
+    
+    // Exact match without case conversion
+    return project.filtertype === activeFilter;
   })
 
   return (
@@ -103,21 +95,20 @@ export default function ProjectsPage() {
 
       {/* Filters */}
       <section className={`${showMobileFilters ? 'block' : 'hidden lg:block'} py-4 lg:py-8 bg-white border-b`}>
-        <div className="container">
-          <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:gap-6 lg:items-center lg:justify-between">
-            {/* Status Filters */}
+        <div className="container mx-auto max-w-6xl px-4">
+          <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:gap-6 lg:items-center lg:justify-center">
+            {/* Property Type Filters */}
             <div className="w-full lg:w-auto">
-              <div className="flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:items-center lg:space-x-4">
-                <span className="text-sm font-medium text-gray-700 lg:hidden">Status</span>
-                <div className="flex flex-wrap gap-2">
+              <div className="flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:items-center lg:justify-center">
+                <div className="flex flex-wrap justify-center gap-2">
                   {filters.map((filter) => (
                     <button
                       key={filter.id}
                       onClick={() => setActiveFilter(filter.id)}
-                      className={`px-3 py-1.5 text-sm lg:px-4 lg:py-2 rounded-full font-medium transition-colors ${
+                      className={`px-4 py-2 text-sm rounded-full font-medium transition-all duration-200 ${
                         activeFilter === filter.id
                           ? "bg-primary-yellow text-navy-blue"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          : "bg-gray-100 text-gray-600 hover:bg-primary-yellow hover:text-navy-blue"
                       }`}
                     >
                       {filter.label}
@@ -127,24 +118,7 @@ export default function ProjectsPage() {
               </div>
             </div>
 
-            {/* Property Type Filter */}
-            <div className="w-full lg:w-auto">
-              <div className="flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:items-center lg:space-x-4">
-                <label htmlFor="property-type" className="text-sm font-medium text-gray-700 lg:hidden">Property Type</label>
-                <select
-                  id="property-type"
-                  value={selectedType}
-                  onChange={(e) => setSelectedType(e.target.value)}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all duration-200 cursor-pointer"
-                >
-                  {propertyTypes.map((type) => (
-                    <option key={type.id} value={type.id}>
-                      {type.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+
 
             {/* Apply Button (Mobile Only) */}
             <div className="lg:hidden pt-2">
@@ -161,13 +135,13 @@ export default function ProjectsPage() {
 
       {/* Projects Grid */}
       <section className="section-padding bg-light">
-        <div className="container">
+        <div className="container mx-auto max-w-6xl px-4">
           {loading ? (
             <div className="col-span-full text-center py-12">
               <p className="text-gray-500">Loading projects...</p>
             </div>
           ) : filteredProjects.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
               {filteredProjects.map((project) => (
                 <div key={project.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full">
                   <div className="relative h-48 sm:h-52 overflow-hidden">
@@ -179,13 +153,13 @@ export default function ProjectsPage() {
                       sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent">
-                      <span className="absolute top-3 left-3 bg-black/70 text-white px-2.5 py-0.5 rounded-full text-xs sm:text-sm font-medium">
-                        {project.status}
+                      <span className="absolute top-3 left-3 bg-black text-white px-2.5 py-0.5 rounded-full text-xs sm:text-sm font-medium">
+                        {project.projectType}
                       </span>
                     </div>
                     <div className="absolute top-3 right-3">
                       <span className="bg-primary-yellow text-navy-blue px-2.5 py-0.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap">
-                        {project.projectFilter?.name || project.type.charAt(0).toUpperCase() + project.type.slice(1)}
+                        {project.filtertype}
                       </span>
                     </div>
                   </div>
@@ -194,6 +168,7 @@ export default function ProjectsPage() {
                     <h3 className="text-lg sm:text-xl font-bold mb-2 text-navy-blue line-clamp-2" title={project.title}>
                       {project.title}
                     </h3>
+                    {project.projectFilter?.name}
 
                   <div className="flex items-start text-gray-600 mb-2 space-x-1.5">
                     <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 mt-0.5 flex-shrink-0" />

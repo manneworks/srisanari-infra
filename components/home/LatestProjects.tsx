@@ -22,7 +22,7 @@ export default function LatestProjects() {
       link: "/projects/farm-lands",
     },
     {
-      title: "Apartments/Villas",
+      title: "Apartments/Villa",
       location: "Hyderabad",
       image: "/images/home-page/our-latest-projects/plot4.jpg",
       link: "/projects/apartments-villas",
@@ -35,10 +35,10 @@ export default function LatestProjects() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
           <div className="text-left">
             <h2 className="text-3xl md:text-4xl font-bold text-navy-blue mb-3 font-heading tracking-tight">
-              Our Latest Projects
+              Our Preferred Categories
             </h2>
             <p className="text-gray-600 text-lg font-sans">
-              Discover our premium properties and investment opportunities
+              Discover our carefully curated property categories
             </p>
           </div>
           <Link 

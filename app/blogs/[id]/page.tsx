@@ -1,66 +1,58 @@
+"use client"
+
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Clock, User, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { BlogPost } from '@/data/blogs';
 
-// Mock data - replace with actual data fetching
-const blogPost = {
-  id: 1,
-  title: "Top 5 Real Estate Investment Tips for 2025",
-  excerpt: "Discover the best strategies for investing in real estate this year and maximize your returns.",
-  date: "June 15, 2025",
-  readTime: "5 min read",
-  category: "Investment",
-  image: "/images/blog/investment-tips.jpg",
-  author: {
-    name: "John Doe",
-    role: "Senior Real Estate Advisor",
-    avatar: "/images/team/team-1.jpg"
-  },
-  content: `
-    <p>Investing in real estate can be a lucrative venture if done correctly. Here are five essential tips to help you make the most of your real estate investments in 2025.</p>
-    <h3 class="text-xl font-semibold mb-4 mt-6">1. Research the Market</h3>
-    <p>Before making any investment, it's crucial to thoroughly research the local real estate market. Look for areas with growth potential, good infrastructure, and amenities.</p>
-    <h3 class="text-xl font-semibold mb-4 mt-6">2. Set Clear Goals</h3>
-    <p>Define your investment objectives clearly. Are you looking for rental income, long-term appreciation, or a quick flip? Your goals will determine your investment strategy.</p>
-    <h3 class="text-xl font-semibold mb-4 mt-6">3. Consider Location Carefully</h3>
-    <p>Location is everything in real estate. Look for properties in neighborhoods with strong growth potential, good schools, and access to transportation.</p>
-    <h3 class="text-xl font-semibold mb-4 mt-6">4. Understand the Numbers</h3>
-    <p>Crunch the numbers carefully. Consider all costs involved, including property taxes, maintenance, and potential vacancy rates.</p>
-    <h3 class="text-xl font-semibold mb-4 mt-6">5. Build a Strong Network</h3>
-    <p>Surround yourself with a team of professionals, including real estate agents, lawyers, and contractors who can help you make informed decisions.</p>
-  `,
-  tags: ["real estate", "investment", "2025", "property"],
-  relatedPosts: [
-    {
-      id: 2,
-      title: "The Future of Smart Homes in India",
-      date: "May 28, 2025",
-      image: "/images/blog/smart-homes.jpg"
-    },
-    {
-      id: 3,
-      title: "Sustainable Living: Green Buildings on the Rise",
-      date: "May 10, 2025",
-      image: "/images/blog/green-buildings.jpg"
+import { getBlogPostBySlug, getBlogPosts } from '@/data/blogs';
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import { Document } from '@contentful/rich-text-types';
+
+export default function BlogPostPage({ params }: { params: Promise<{ id: string }> }) {
+  const unwrappedParams = React.use(params);
+  const [blogPost, setBlogPost] = useState<BlogPost | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<BlogPost[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  useEffect(() => {
+    const fetchBlogPost = async () => {
+      const post = await getBlogPostBySlug(unwrappedParams.id);
+      setBlogPost(post);
+    };
+    fetchBlogPost();
+  }, [unwrappedParams]);
+
+  if (!blogPost) {
+    return null;
+  }
+
+  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    if (query.trim() === "") {
+      setSearchResults([]);
+      setIsSearching(false);
+      return;
     }
-  ]
-};
 
-export default function BlogPostPage() {
+    setIsSearching(true);
+    const allPosts = await getBlogPosts();
+    const filteredPosts = allPosts.filter(post =>
+      post.title.toLowerCase().includes(query) ||
+      post.blogdescription.toLowerCase().includes(query)
+    );
+    setSearchResults(filteredPosts);
+    setIsSearching(false);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Hero/Banner Section */}
       <section className="pt-24 pb-10 sm:pt-28 sm:pb-12 md:pt-36 md:pb-20 bg-navy text-white relative z-10">
-        <div className="absolute inset-0">
-          <Image
-            src={blogPost.image}
-            alt={blogPost.title}
-            fill
-            className="object-cover opacity-70"
-            priority
-          />
-          <div className="absolute inset-0 bg-black bg-opacity-50" />
-        </div>
         <div className="container relative h-full flex flex-col justify-center px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center text-white">
             <div className="flex items-center justify-center mb-4">
@@ -77,7 +69,7 @@ export default function BlogPostPage() {
             <div className="flex items-center justify-center space-x-6 text-sm text-gray-200">
               <span className="flex items-center">
                 <User className="h-4 w-4 mr-1" />
-                {blogPost.author.name}
+                {blogPost.authorName || "Unknown Author"}
               </span>
               <span className="flex items-center">
                 <Calendar className="h-4 w-4 mr-1" />
@@ -92,23 +84,57 @@ export default function BlogPostPage() {
         </div>
       </section>
 
-      {/* Mobile Search - Only visible on mobile */}
-      <div className="lg:hidden bg-white py-4 px-4 shadow-sm sticky top-0 z-10">
-        <div className="container mx-auto">
-          <div className="relative max-w-2xl mx-auto">
-            <input
-              type="text"
-              placeholder="Search articles..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent"
-            />
-            <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-500 hover:text-navy">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
+      {/* Search Results Overlay */}
+      {searchResults.length > 0 && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-xl p-4 sm:p-6 w-full max-w-sm sm:max-w-2xl shadow-lg">
+            <div className="flex justify-between items-center mb-4 sm:mb-6">
+              <h3 className="text-lg sm:text-xl font-bold">Search Results</h3>
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSearchResults([]);
+                }}
+                className="text-gray-500 hover:text-gray-700 transition-colors p-2"
+              >
+                <svg className="h-4 w-4 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="space-y-3 sm:space-y-4">
+              {searchResults.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/blogs/${post.slug}`}
+                  className="block hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <div className="p-3 sm:p-4">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                      <div className="flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 overflow-hidden rounded-lg bg-gray-100">
+                        <img
+                          src={post.image || "/images/blog/green-buildings.jpg"}
+                          alt={post.title}
+                          className="object-cover w-full h-full"
+                          width={80}
+                          height={80}
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-gray-900 line-clamp-2 text-sm sm:text-base">{post.title}</h4>
+                        <p className="text-xs sm:text-sm text-gray-500 line-clamp-2">{post.blogdescription}</p>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+
 
       {/* Main Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8 sm:py-12 md:py-16 lg:py-20 flex-1">
@@ -116,23 +142,58 @@ export default function BlogPostPage() {
           <div className="flex flex-col lg:flex-row gap-12">
             {/* Main Content */}
             <main className="w-full lg:w-2/3">
+              {/* Search */}
+              <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search articles..."
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent"
+                  />
+                  <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-500 hover:text-navy">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
               <article className="prose max-w-none w-full mt-4 sm:mt-0">
                 <div className="bg-white rounded-xl shadow-md p-5 sm:p-6 md:p-8 lg:p-10">
-                  <div 
-                    className="prose max-w-none"
-                    dangerouslySetInnerHTML={{ __html: blogPost.content }}
-                  />
+                  {blogPost.fullContent && (
+                    <div className="prose max-w-none">
+                      <div 
+                        dangerouslySetInnerHTML={{ 
+                          __html: documentToHtmlString(blogPost.fullContent as Document, {
+                            renderNode: {
+                              'heading-1': (node, next) => `<h1 class="text-3xl font-bold mb-6">${next(node.content)}</h1>`,
+                              'heading-2': (node, next) => `<h2 class="text-2xl font-semibold mb-4">${next(node.content)}</h2>`,
+                              'heading-3': (node, next) => `<h3 class="text-xl font-medium mb-3">${next(node.content)}</h3>`,
+                              'heading-4': (node, next) => `<h4 class="text-lg font-medium mb-2">${next(node.content)}</h4>`,
+                              'heading-5': (node, next) => `<h5 class="text-base font-medium mb-1">${next(node.content)}</h5>`,
+                              'heading-6': (node, next) => `<h6 class="text-sm font-medium mb-1">${next(node.content)}</h6>`
+                            }
+                          })
+                        }}
+                      />
+                    </div>
+                  )}
                   
                   {/* Tags */}
-                  <div className="mt-12 pt-8 border-t border-gray-200">
-                    <div className="flex flex-wrap gap-2 -mx-1">
-                      {blogPost.tags.map((tag, index) => (
-                        <span key={index} className="inline-block bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full mx-1 my-1">
-                          #{tag}
-                        </span>
-                      ))}
+                  {blogPost.tags && blogPost.tags.length > 0 && (
+                    <div className="mt-12 pt-8 border-t border-gray-200">
+                      <h3 className="text-lg font-semibold mb-4">Tags</h3>
+                      <div className="flex flex-wrap gap-2 -mx-1">
+                        {blogPost.tags.map((tag, index) => (
+                          <span key={index} className="inline-block bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full mx-1 my-1">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Share Buttons */}
                   <div className="mt-8 pt-6 border-t border-gray-200">
@@ -154,127 +215,84 @@ export default function BlogPostPage() {
 
               {/* Related Posts */}
               <div className="mt-16">
-                <h3 className="text-2xl font-bold mb-8">You May Also Like</h3>
+                <h3 className="text-2xl font-bold mb-8">You May Also Like Recent Articles</h3>
                 <div className="grid md:grid-cols-2 gap-6">
-                  {blogPost.relatedPosts.map((post) => (
-                    <Link href={`/blogs/${post.id}`} key={post.id} className="group">
-                      <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                        <div className="h-48 relative">
-                          <Image
-                            src={post.image}
-                            alt={post.title}
-                            fill
-                            className="object-cover"
-                          />
+                  {(blogPost.recentArticles || []).map((article, index) => {
+                    const articleFields = article.fields || {};
+                    return (
+                      <Link key={articleFields.slug} href={`/blogs/${articleFields.slug}`} className="group">
+                        <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                          <div className="h-48 relative">
+                            <Image
+                              src={articleFields.coverImage?.fields?.file?.url || "/images/blog/green-buildings.jpg"}
+                              alt={articleFields.title || 'Article'}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <div className="p-6">
+                            <h4 className="text-lg font-semibold mb-2 group-hover:text-primary-yellow transition-colors">
+                              {articleFields.title || 'Untitled Article'}
+                            </h4>
+                            <p className="text-sm text-gray-500">{articleFields.publishDate ? new Date(articleFields.publishDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                          </div>
                         </div>
-                        <div className="p-6">
-                          <h4 className="text-lg font-semibold mb-2 group-hover:text-primary-yellow transition-colors">
-                            {post.title}
-                          </h4>
-                          <p className="text-sm text-gray-500">{post.date}</p>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
             </main>
 
             {/* Sidebar */}
             <aside className="w-full lg:w-1/3 space-y-6 sm:space-y-8 mt-6 sm:mt-10 lg:mt-0">
-              {/* Desktop Search - Hidden on mobile */}
-              <div className="hidden lg:block bg-white rounded-xl shadow-md p-6">
-                <h3 className="text-xl font-semibold mb-4">Search</h3>
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search articles..."
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent"
-                  />
-                  <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-500 hover:text-navy">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
 
-              {/* Recent Articles */}
-              <div className="bg-white rounded-xl shadow-md overflow-hidden">
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-4">Recent Articles</h3>
-                  <div className="space-y-5">
-                    {[
-                      { 
-                        id: 1, 
-                        title: "5 Emerging Real Estate Markets in 2025",
-                        excerpt: "Discover the top up-and-coming areas for real estate investment this year.",
-                        date: "July 2, 2025",
-                        image: "/images/blog/emerging-markets.jpg"
-                      },
-                      { 
-                        id: 2, 
-                        title: "Sustainable Living: Eco-Friendly Homes",
-                        excerpt: "How green building practices are shaping the future of residential properties.",
-                        date: "June 25, 2025",
-                        image: "/images/blog/eco-homes.jpg"
-                      },
-                      { 
-                        id: 3, 
-                        title: "The Future of Urban Development",
-                        excerpt: "Exploring the latest trends in city planning and smart communities.",
-                        date: "June 18, 2025",
-                        image: "/images/blog/urban-development.jpg"
-                      },
-                    ].map((article) => (
-                      <div key={article.id} className="flex gap-4 pb-4 border-b border-gray-100 last:border-0 last:pb-0">
-                        <div className="flex-shrink-0 w-20 h-20 overflow-hidden rounded-lg">
-                          <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
-                            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                          </div>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-medium text-gray-800 leading-tight line-clamp-2">
-                            {article.title}
-                          </h4>
-                          <p className="text-sm text-gray-500 mt-1 line-clamp-1">{article.excerpt}</p>
-                          <span className="text-xs text-gray-400 mt-1 block">{article.date}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="bg-gray-50 px-6 py-3 text-center">
-                  <a href="/blogs" className="text-sm font-medium text-navy hover:text-navy-dark transition-colors">
-                    View All Articles →
-                  </a>
-                </div>
-              </div>
 
-              {/* Categories */}
-              <div className="bg-white rounded-xl shadow-md p-6">
-                <h3 className="text-xl font-semibold mb-4">Categories</h3>
-                <ul className="space-y-2">
-                  {[
-                    { name: "Investment", count: 12 },
-                    { name: "Market Trends", count: 8 },
-                    { name: "Home Buying", count: 15 },
-                    { name: "Interior Design", count: 6 },
-                    { name: "Property Management", count: 9 },
-                  ].map((category, index) => (
-                    <li key={index} className="flex justify-between items-center">
-                      <span className="text-gray-700">
-                        {category.name}
-                      </span>
-                      <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
-                        {category.count}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+               {/* Related Articles */}
+               <div className="bg-white rounded-xl shadow-md overflow-hidden">
+                 <div className="p-6">
+                   <h3 className="text-xl font-semibold mb-4">Related Articles</h3>
+                   <div className="space-y-5">
+                      {blogPost.recentArticles?.map((article) => (
+                        <Link key={article.fields.slug} href={`/blogs/${article.fields.slug}`} className="flex gap-4 pb-4 border-b border-gray-100 last:border-0 last:pb-0 hover:bg-gray-50 transition-colors">
+                         <div className="flex-shrink-0 w-20 h-20 overflow-hidden rounded-lg">
+                           <img
+                             src={article.fields.coverImage?.fields?.file?.url || "/images/blog/green-buildings.jpg"}
+                             alt={article.fields.title}
+                             width={80}
+                             height={80}
+                             className="object-cover w-full h-full"
+                           />
+                         </div>
+                         <div className="flex-1 min-w-0">
+                           <h4 className="font-medium text-gray-800 leading-tight line-clamp-2">
+                             {article.fields.title}
+                           </h4>
+                           <p className="text-sm text-gray-500 mt-1 line-clamp-1">{article.fields.blogDescription}</p>
+                           <span className="text-xs text-gray-400 mt-1 block">{new Date(article.fields.publishDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                         </div>
+                       </Link>
+                     ))}
+                   </div>
+                 </div>
+                 <div className="bg-gray-50 px-6 py-3 text-center">
+                   <a href="/blogs" className="text-sm font-medium text-navy hover:text-navy-dark transition-colors">
+                     View All Articles →
+                   </a>
+                 </div>
+               </div>
+
+               {/* Categories */}
+               <div className="bg-white rounded-xl shadow-md p-6">
+                 <h3 className="text-xl font-semibold mb-4 text-center">Categories</h3>
+                 <div className="bg-gray-50 p-4 rounded-lg text-center border border-gray-100">
+                   <p className="text-base font-medium text-gray-700">Investment</p>
+                   <p className="text-base font-medium text-gray-700">Market Trends</p>
+                   <p className="text-base font-medium text-gray-700">Home Buying</p>
+                   <p className="text-base font-medium text-gray-700">Interior Design</p>
+                   <p className="text-base font-medium text-gray-700">Property Management</p>
+                 </div>
+               </div>
 
               {/* Follow Us */}
               <div className="bg-white rounded-xl shadow-md p-6">

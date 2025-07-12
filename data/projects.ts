@@ -61,6 +61,7 @@ interface ContentfulFields {
   title: { 'en-US': string };
   type: { 'en-US': string };
   projectType?: { 'en-US': ContentfulProjectType };
+  filtertype?: { 'en-US': string };
   projectFilter?: { 'en-US': ContentfulProjectFilter };
   status: { 'en-US': ProjectStatus };
   location: { 'en-US': string };
@@ -228,7 +229,7 @@ function mapContentfulEntry(entry: ContentfulEntry): Project {
     amenities: getLocalizedField(fields.amenities, []),
     locationAdvantages: getLocalizedField(fields.locationAdvantages, []),
     projectType: projectType || undefined,
-    projectFilter: projectFilter || undefined
+    filtertype: getLocalizedField(fields.filtertype, '') || undefined
   };
 }
 

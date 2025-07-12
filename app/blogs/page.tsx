@@ -15,9 +15,9 @@ interface BlogPost {
   category: string;
   slug: string;
   authorName?: string;
-  fullContent?: string;
+  fullBlogContent?: string;
   tags?: string[];
-  socialMediaLinks?: Record<string, string>;
+  // socialMediaLinks?: Record<string, string>;
   recentArticles?: string[];
   categories?: string[];
 }

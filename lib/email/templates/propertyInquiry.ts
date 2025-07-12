@@ -1,7 +1,14 @@
 import { ContactFormData } from '../types';
 
-export const getContactEmailTemplate = (data: ContactFormData) => {
-  const { name, email, phone, subject, message } = data;
+interface PropertyInquiryData extends Omit<ContactFormData, 'subject'> {
+  subject?: string;
+  propertyId?: string;
+  propertyTitle?: string;
+}
+
+export const getPropertyInquiryTemplate = (data: PropertyInquiryData) => {
+  const { name, email, phone, message, propertyId, propertyTitle } = data;
+  const subject = `Inquiry about property: ${propertyTitle || propertyId || 'Property'}`;
   
   // Format the current date
   const currentDate = new Date().toLocaleDateString('en-US', {
@@ -11,14 +18,15 @@ export const getContactEmailTemplate = (data: ContactFormData) => {
     hour: '2-digit',
     minute: '2-digit'
   });
-
+  
   return {
-    subject: `New Contact Form: ${subject || 'Enquiry from Website'}`,
+    subject,
     text: `
-      Contact Form Submission
-      ======================
+      Property Inquiry Details
+      =======================
       
-      Subject: ${subject || 'No Subject'}
+      Property: ${propertyTitle || 'Not specified'}
+      Property ID: ${propertyId || 'N/A'}
       
       Contact Information:
       -------------------
@@ -28,9 +36,12 @@ export const getContactEmailTemplate = (data: ContactFormData) => {
       
       Message:
       --------
-      ${message}
+      ${message || 'No message provided'}
+      
       
       This inquiry was submitted on: ${currentDate}
+      
+      Please respond to this inquiry at your earliest convenience.
     `,
     html: `
     <!DOCTYPE html>
@@ -38,7 +49,7 @@ export const getContactEmailTemplate = (data: ContactFormData) => {
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>New Contact Form - SRI SANARI</title>
+      <title>New Property Inquiry - SRI SANARI</title>
       <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
       <style type="text/css">
         /* Base Styles */
@@ -59,8 +70,6 @@ export const getContactEmailTemplate = (data: ContactFormData) => {
           border-radius: 8px;
           overflow: hidden;
           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-          max-width: 600px;
-          margin: 0 auto;
         }
         /* Header Styles */
         .email-header {
@@ -100,85 +109,66 @@ export const getContactEmailTemplate = (data: ContactFormData) => {
           line-height: 1.4;
         }
         .email-body {
-          padding: 30px;
+          padding: 25px;
+        }
+        .property-details {
+          background-color: #f0f4f8;
+          border-radius: 6px;
+          padding: 15px;
+          margin-bottom: 20px;
+        }
+        .property-title {
+          color: #2c5282;
+          margin-top: 0;
+          font-size: 20px;
+          font-weight: 600;
         }
         .section-title {
           color: #2c5282;
           font-size: 16px;
           font-weight: 600;
-          margin: 25px 0 15px 0;
-          padding-bottom: 8px;
+          margin: 20px 0 10px 0;
           border-bottom: 2px solid #e2e8f0;
+          padding-bottom: 5px;
         }
         .detail-row {
-          margin-bottom: 12px;
+          margin-bottom: 8px;
           display: flex;
-          flex-wrap: wrap;
         }
         .detail-label {
           font-weight: 600;
           color: #4a5568;
-          width: 100px;
+          width: 120px;
           flex-shrink: 0;
         }
         .detail-value {
           color: #2d3748;
-          flex: 1;
         }
         .message-box {
           background-color: #f8fafc;
           border-left: 4px solid #4299e1;
-          padding: 15px;
-          margin: 20px 0;
+          padding: 12px 15px;
+          margin: 15px 0;
+          font-style: italic;
           border-radius: 0 4px 4px 0;
-          line-height: 1.6;
         }
-        .reply-button {
+        .footer {
+          margin-top: 30px;
+          padding-top: 15px;
+          border-top: 1px solid #e2e8f0;
+          font-size: 14px;
+          color: #718096;
+          text-align: center;
+        }
+        .button {
           display: inline-block;
           background-color: #ecc94b;
           color: #2d3748;
           text-decoration: none;
-          font-weight: 600;
-          padding: 10px 24px;
+          padding: 10px 20px;
           border-radius: 4px;
-          margin: 25px 0 15px;
-          text-align: center;
-          transition: all 0.3s ease;
-          font-family: 'Montserrat', Arial, sans-serif;
-          font-size: 15px;
-        }
-        .reply-button:hover {
-          background-color: #d69e2e;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .footer {
-          margin-top: 30px;
-          padding-top: 20px;
-          border-top: 1px solid #e2e8f0;
-          font-size: 13px;
-          color: #718096;
-          text-align: center;
-        }
-        @media only screen and (max-width: 600px) {
-          .email-body {
-            padding: 20px 15px;
-          }
-          .detail-row {
-            flex-direction: column;
-          }
-          .detail-label {
-            width: 100%;
-            margin-bottom: 2px;
-          }
-        }
-        .footer { 
-          margin-top: 30px; 
-          font-size: 12px; 
-          color: #718096; 
-          text-align: center; 
-          padding-top: 20px;
-          border-top: 1px solid #e2e8f0;
+          font-weight: 600;
+          margin: 15px 0;
         }
       </style>
     </head>
@@ -206,7 +196,7 @@ export const getContactEmailTemplate = (data: ContactFormData) => {
           
           <!-- Email Title -->
           <h1 style="margin: 25px 0 10px; font-size: 20px; font-weight: 600; color: #ffffff; text-transform: uppercase; letter-spacing: 1px; padding: 0 10px;">
-            New Contact Form Submission
+            New Property Inquiry
           </h1>
           
           <!-- Date -->
@@ -216,43 +206,41 @@ export const getContactEmailTemplate = (data: ContactFormData) => {
         </div>
         
         <div class="email-body">
-          <h2 class="section-title">Contact Information</h2>
+          <div class="property-details">
+            <h2 class="property-title">${propertyTitle || 'Property of Interest'}</h2>
+            <div class="detail-row">
+              <div class="detail-label">Property ID:</div>
+              <div class="detail-value">${propertyId || 'N/A'}</div>
+            </div>
+          </div>
           
+          <h3 class="section-title">Contact Information</h3>
           <div class="detail-row">
             <div class="detail-label">Name:</div>
             <div class="detail-value">${name}</div>
           </div>
-          
           <div class="detail-row">
             <div class="detail-label">Email:</div>
             <div class="detail-value"><a href="mailto:${email}" style="color: #2b6cb0; text-decoration: none;">${email}</a></div>
           </div>
-          
           <div class="detail-row">
             <div class="detail-label">Phone:</div>
             <div class="detail-value">${phone || 'Not provided'}</div>
           </div>
           
-          <div class="detail-row">
-            <div class="detail-label">Subject:</div>
-            <div class="detail-value">${subject || 'No Subject'}</div>
-          </div>
-          
-          <h2 class="section-title">Message</h2>
+          <h3 class="section-title">Message</h3>
           <div class="message-box">
-            ${message.replace(/\n/g, '<br>')}
+            ${message.replace(/\n/g, '<br>') || 'No message provided'}
           </div>
           
-          <!-- Reply Button -->
           <div style="text-align: center; margin: 25px 0;">
-            <a href="mailto:${email}" class="reply-button" style="display: inline-block; background-color: #ecc94b; color: #2d3748; text-decoration: none; font-weight: 600; padding: 10px 24px; border-radius: 4px; margin: 25px 0 15px; text-align: center; font-family: 'Montserrat', Arial, sans-serif; font-size: 15px; transition: all 0.3s ease;">
-              Reply to ${name.split(' ')[0]}
-            </a>
+            <a href="mailto:${email}" class="button">Reply to ${name.split(' ')[0]}</a>
           </div>
           
           <div class="footer">
-            <p>This message was sent from the contact form on SRI SANARI website.</p>
-            <p style="margin-top: 5px; font-size: 12px; color: #a0aec0;">
+            <p>This inquiry was submitted through the SRI SANARI website on ${currentDate}.</p>
+            <p>Please respond to this inquiry at your earliest convenience.</p>
+            <p style="margin-top: 15px; font-size: 12px; color: #a0aec0;">
               &copy; ${new Date().getFullYear()} SRI SANARI. All rights reserved.
             </p>
           </div>
@@ -263,3 +251,5 @@ export const getContactEmailTemplate = (data: ContactFormData) => {
     `
   };
 };
+
+export default getPropertyInquiryTemplate;

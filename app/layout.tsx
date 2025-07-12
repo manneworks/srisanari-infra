@@ -4,6 +4,7 @@ import { Montserrat, Open_Sans } from "next/font/google"
 import "./globals.css"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
+import WhatsAppButton from "@/components/WhatsAppButton"
 
 // Configure Montserrat for headings
 const montserrat = Montserrat({ 
@@ -63,6 +64,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${montserrat.variable} ${openSans.variable}`}>
       <body className={`min-h-screen flex flex-col bg-white font-sans`}>
+        <WhatsAppButton />
         <Header />
         <main className="flex-grow">{children}</main>
         <Footer />

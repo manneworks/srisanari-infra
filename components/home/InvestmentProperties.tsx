@@ -1,4 +1,15 @@
+'use client';
+
+import { useState } from 'react';
+import Image from 'next/image';
+
 export default function InvestmentProperties() {
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handlePlay = () => {
+    setIsPlaying(true);
+  };
+
   return (
     <section className="section-padding bg-white">
       <div className="container">
@@ -15,23 +26,35 @@ export default function InvestmentProperties() {
           {/* Video */}
           <div className="relative group">
             <div className="aspect-video bg-gray-900 rounded-xl overflow-hidden shadow-xl transform transition-all duration-300 group-hover:shadow-2xl">
-              <iframe
-                width="100%"
-                height="100%"
-                src="https://www.youtube.com/embed/your-video-id"
-                title="SRI SANARI - Your Trusted Real Estate Partner"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full transition-opacity duration-300 group-hover:opacity-90"
-              ></iframe>
-              <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors duration-300">
-                <div className="w-16 h-16 md:w-20 md:h-20 bg-white/90 rounded-full flex items-center justify-center transform transition-transform group-hover:scale-110">
-                  <svg className="w-8 h-8 md:w-10 md:h-10 text-primary-yellow" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M8 5v14l11-7z"/>
-                  </svg>
+              {isPlaying ? (
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src="https://www.youtube.com/embed/QCNLJQ6X5LA?autoplay=1&modestbranding=1&controls=0&showinfo=0&rel=0&disablekb=1"
+                  title="SRI SANARI - Your Trusted Real Estate Partner"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full"
+                ></iframe>
+              ) : (
+                <div className="w-full h-full flex items-center justify-center cursor-pointer" onClick={handlePlay}>
+                  <div className="absolute inset-0 bg-gray-900 rounded-xl overflow-hidden">
+                    <img
+                      src="https://img.youtube.com/vi/QCNLJQ6X5LA/hqdefault.jpg"
+                      alt="Video thumbnail"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors duration-300 hover:bg-black/10">
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-white/90 rounded-full flex items-center justify-center transform transition-transform hover:scale-110">
+                      <svg className="w-8 h-8 md:w-10 md:h-10 text-primary-yellow" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
