@@ -28,6 +28,11 @@ export const metadata: Metadata = {
     template: "%s | SRI SANARI SHANKARA INFRA"
   },
   description: "Premium plots at affordable prices in Telangana. Your trusted partner in real estate development with RERA approved projects.",
+  icons: {
+    icon: '/images/favicon.png',
+    apple: '/images/favicon.png',
+    shortcut: '/images/favicon.png'
+  },
   keywords: ["real estate", "plots", "Telangana", "RERA approved", "residential plots", "commercial plots", "real estate Hyderabad", "plots in Hyderabad", "affordable housing"],
   authors: [{ name: "SRI SANARI SHANKARA INFRA" }],
   openGraph: {
