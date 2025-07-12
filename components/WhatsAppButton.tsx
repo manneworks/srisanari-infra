@@ -8,13 +8,14 @@ const WhatsAppButton = () => {
   const router = useRouter();
 
   const handleClick = async () => {
-    const phoneNumber = contactDetails.phoneNumbers[0]; // Use the full phone number with country code
+    // Format phone number for WhatsApp (remove + and spaces)
+    const phoneNumber = contactDetails.phoneNumbers[0].replace('+', '').replace(/\s/g, '');
     
-    if (navigator.userAgent.includes('WhatsApp')) {
-      window.open(`whatsapp://send?phone=${phoneNumber}`)
-    } else {
-      window.open(`https://web.whatsapp.com/send?phone=${phoneNumber}`, '_blank');
-    }
+    // Pre-filled message
+    const message = encodeURIComponent('Hi, I am interested in your properties. Please share more details.');
+    
+    // Open WhatsApp with pre-filled message
+    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
   }
 
   return (
