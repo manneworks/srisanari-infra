@@ -9,16 +9,16 @@ importers:
   .:
     dependencies:
       '@contentful/rich-text-html-renderer':
-        specifier: ^17.0.0
+        specifier: ^17.0.1
         version: 17.0.1
       '@contentful/rich-text-plain-text-renderer':
         specifier: ^17.0.0
         version: 17.0.1
       '@contentful/rich-text-react-renderer':
-        specifier: ^16.0.1
+        specifier: ^16.0.2
         version: 16.0.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@contentful/rich-text-types':
-        specifier: ^17.0.0
+        specifier: ^17.0.1
         version: 17.0.1
       '@hookform/resolvers':
         specifier: ^3.9.1
