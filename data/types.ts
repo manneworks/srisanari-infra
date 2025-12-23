@@ -18,6 +18,7 @@ export interface Project {
   area: string;
   completion: string;
   description: string | ReactNode;
+  createdAt?: string | number | Date;
   images: string[];
   specifications: ProjectSpecifications;
   amenities: string[];

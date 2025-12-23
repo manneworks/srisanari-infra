@@ -29,6 +29,6 @@ export const quickLinks = [
   { name: 'Our Projects', url: '/projects' },
   { name: 'Blogs', url: '/blogs' },
   { name: 'Contact', url: '/contact' },
-  { name: 'Privacy Policy', url: '/privacy-policy' },
-  { name: 'Terms & Conditions', url: '/terms' }
+  // { name: 'Privacy Policy', url: '/privacy-policy' },
+  // { name: 'Terms & Conditions', url: '/terms' }
 ]

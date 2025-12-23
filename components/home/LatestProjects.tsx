@@ -5,19 +5,19 @@ export default function LatestProjects() {
   const projects = [
     {
       title: "Open Plots",
-      location: "Maheshwaram, Tukkaguda",
+      location: "Hyderabad",
       image: "/images/home-page/our-latest-projects/plot1.jpeg",
       link: "/projects/open-plots",
     },
     {
-      title: "Development Lands",
-      location: "Hyderabad, Shadnagar",
+      title: "Development ",
+      location: "Hyderabad",
       image: "/images/home-page/our-latest-projects/plot2.jpg",
       link: "/projects/development-lands",
     },
     {
       title: "Farm Lands",
-      location: "Maheshwaram, Shamshabad",
+      location: "Hyderabad",
       image: "/images/home-page/our-latest-projects/plot3.avif",
       link: "/projects/farm-lands",
     },

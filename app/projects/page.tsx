@@ -142,94 +142,98 @@ export default function ProjectsPage() {
             </div>
           ) : filteredProjects.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
-              {filteredProjects.map((project) => (
-                <div key={project.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full">
-                  <div className="relative h-48 sm:h-52 overflow-hidden">
-                    <Image 
-                      src={project.image} 
-                      alt={project.title} 
-                      fill 
-                      className="object-cover transition-transform duration-500 hover:scale-105"
-                      sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent">
-                      <span className="absolute top-3 left-3 bg-black text-white px-2.5 py-0.5 rounded-full text-xs sm:text-sm font-medium">
-                        {project.projectType}
-                      </span>
-                    </div>
-                    <div className="absolute top-3 right-3">
-                      <span className="bg-primary-yellow text-navy-blue px-2.5 py-0.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap">
-                        {project.filtertype}
-                      </span>
-                    </div>
-                  </div>
+              {filteredProjects.map((project) => {
+                const projectUrl = `/projects/${project.id}`;
+                return (
+                  <Link 
+                    key={project.id}
+                    href={projectUrl}
+                    className="block h-full bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+                  >
+                      <div className="flex flex-col h-full">
+                        <div className="relative h-48 sm:h-52 overflow-hidden">
+                          <Image 
+                            src={project.image} 
+                            alt={project.title} 
+                            fill 
+                            className="object-cover transition-transform duration-500 hover:scale-105"
+                            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent">
+                            <span className="absolute top-3 left-3 bg-black text-white px-2.5 py-0.5 rounded-full text-xs sm:text-sm font-medium">
+                              {project.projectType}
+                            </span>
+                          </div>
+                          <div className="absolute top-3 right-3">
+                            <span className="bg-primary-yellow text-navy-blue px-2.5 py-0.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap">
+                              {project.filtertype}
+                            </span>
+                          </div>
+                        </div>
 
-                  <div className="p-4 sm:p-5 md:p-6 flex-1 flex flex-col">
-                    <h3 className="text-lg sm:text-xl font-bold mb-2 text-navy-blue line-clamp-2" title={project.title}>
-                      {project.title}
-                    </h3>
-                    {project.projectFilter?.name}
+                        <div className="p-4 sm:p-5 md:p-6 flex-1 flex flex-col">
+                          <h3 className="text-lg sm:text-xl font-bold mb-2 text-navy-blue line-clamp-2" title={project.title}>
+                            {project.title}
+                          </h3>
+                          <div className="flex items-start text-gray-600 mb-2 space-x-1.5">
+                            <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 mt-0.5 flex-shrink-0" />
+                            <span className="text-xs sm:text-sm line-clamp-2">{project.location}</span>
+                          </div>
 
-                  <div className="flex items-start text-gray-600 mb-2 space-x-1.5">
-                    <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 mt-0.5 flex-shrink-0" />
-                    <span className="text-xs sm:text-sm line-clamp-2">{project.location}</span>
-                  </div>
+                          <div className="flex items-center text-gray-600 mb-3 sm:mb-4 space-x-1.5">
+                            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+                            <span className="text-xs sm:text-sm">
+                              {typeof project.completion === 'string' && project.completion.includes('Completion:') 
+                                ? project.completion 
+                                : `Completion: ${project.completion || 'N/A'}`}
+                            </span>
+                          </div>
 
-                  <div className="flex items-center text-gray-600 mb-3 sm:mb-4 space-x-1.5">
-                    <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
-                    <span className="text-xs sm:text-sm">
-                      {typeof project.completion === 'string' && project.completion.includes('Completion:') 
-                        ? project.completion 
-                        : `Completion: ${project.completion || 'N/A'}`}
-                    </span>
-                  </div>
+                          <div className="mt-auto pt-2 border-t border-gray-100">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
+                              <span className="text-lg sm:text-xl font-medium text-primary-yellow">
+                                {project.price}
+                              </span>
+                              {project.area && (
+                                <span className="text-gray-600 text-sm bg-gray-50 px-2.5 py-1 rounded-md">
+                                  {project.area}
+                                </span>
+                              )}
+                            </div>
+                          </div>
 
-                  <div className="mt-auto pt-2 border-t border-gray-100">
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
-                      <span className="text-lg sm:text-xl font-medium text-primary-yellow">
-                        {project.price}
-                      </span>
-                      {project.area && (
-                        <span className="text-gray-600 text-sm bg-gray-50 px-2.5 py-1 rounded-md">
-                          {project.area}
-                        </span>
-                      )}
-                    </div>
-                  </div>
+                          <div className="mt-4 sm:mt-6">
+                            <div className="mb-4 sm:mb-6">
+                              <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                                {project.features.slice(0, 3).map((feature: string, index: number) => (
+                                  <span
+                                    key={index}
+                                    className="bg-gray-50 text-gray-700 px-2 py-0.5 sm:py-1 rounded text-xs border border-gray-100"
+                                    title={feature}
+                                  >
+                                    {feature.length > 15 ? `${feature.substring(0, 15)}...` : feature}
+                                  </span>
+                                ))}
+                                {project.features.length > 3 && (
+                                  <span
+                                    className="bg-gray-50 text-gray-500 px-2 py-0.5 sm:py-1 rounded text-xs border border-gray-100"
+                                    title={`${project.features.length - 3} more features`}
+                                  >
+                                    +{project.features.length - 3}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
 
-                  <div className="mt-4 sm:mt-6">
-                    <div className="mb-4 sm:mb-6">
-                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                        {project.features.slice(0, 3).map((feature: string, index: number) => (
-                          <span 
-                            key={index} 
-                            className="bg-gray-50 text-gray-700 px-2 py-0.5 sm:py-1 rounded text-xs border border-gray-100"
-                            title={feature}
-                          >
-                            {feature.length > 15 ? `${feature.substring(0, 15)}...` : feature}
-                          </span>
-                        ))}
-                        {project.features.length > 3 && (
-                          <span 
-                            className="bg-gray-50 text-gray-500 px-2 py-0.5 sm:py-1 rounded text-xs border border-gray-100"
-                            title={`${project.features.length - 3} more features`}
-                          >
-                            +{project.features.length - 3}
-                          </span>
-                        )}
+                            <div className="btn-primary w-full text-center block mt-2 sm:mt-3 !text-black hover:!text-black text-sm sm:text-base py-2 sm:py-2.5">
+                              View Details
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-
-                    <Link 
-                      href={`/properties/${project.id}`} 
-                      className="btn-primary w-full text-center block mt-2 sm:mt-3 !text-black hover:!text-black text-sm sm:text-base py-2 sm:py-2.5"
-                    >
-                      View Details
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
+                  </Link>
+                );
+              })}
             </div>
           ) : (
             <div className="col-span-full text-center py-12">
